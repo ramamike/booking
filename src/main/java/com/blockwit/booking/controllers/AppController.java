@@ -4,6 +4,7 @@ import com.blockwit.booking.entity.Booking;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.repository.BookingRepository;
 import com.blockwit.booking.repository.HotelRepository;
+import com.blockwit.booking.service.ControllerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -23,20 +25,21 @@ import java.util.Optional;
 public class AppController {
 
 	@Autowired
+	private ControllerService controllerService;
+
+	@Autowired
 	HotelRepository hotelRepo;
 
 	@Autowired
 	BookingRepository bookingRepo;
 
 	@GetMapping
-	public String home(Model model) {
-		Iterable<Hotel> hotels = hotelRepo.findAll();
-		model.addAttribute("hotels", hotels);
-		return "front/home";
+	public ModelAndView home() {
+		return controllerService.showHotels("front/home", "hotels");
 	}
 
 	@GetMapping("/add")
-	public String hotelAdd(Model model) {
+	public String hotelAdd() {
 		return "front/hotel-add";
 	}
 
