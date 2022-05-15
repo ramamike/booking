@@ -4,7 +4,7 @@ import com.blockwit.booking.entity.Booking;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.repository.BookingRepository;
 import com.blockwit.booking.repository.HotelRepository;
-import com.blockwit.booking.service.ControllerService;
+import com.blockwit.booking.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +25,7 @@ import java.util.Optional;
 public class AppController {
 
 	@Autowired
-	private ControllerService controllerService;
+	private HotelService hotelService;
 
 	@Autowired
 	HotelRepository hotelRepo;
@@ -35,7 +35,7 @@ public class AppController {
 
 	@GetMapping
 	public ModelAndView home() {
-		return controllerService.showHotels("front/home", "hotels");
+		return hotelService.showHotels("front/home", "hotels");
 	}
 
 	@GetMapping("/add")
@@ -49,24 +49,21 @@ public class AppController {
 							   @RequestParam String name,
 							   @RequestParam String description,
 							   Model model) {
-		Hotel hotel = Hotel.builder()
-			.name(name)
-			.description(description)
-			.build();
-		hotelRepo.save(hotel);
+
+		Hotel hotel=Hotel.builder()
+				.name(name)
+				.description(description)
+				.build();
+
+		hotelService.saveHotel(hotel);
 
 		redirectAttributes.addFlashAttribute("message_success", "Отель " + hotel.getName() + " успешно создан!");
 		return new RedirectView("/", true);
 	}
 
 	@GetMapping("/edit/{hotelId}")
-	public String hotelDetails(@PathVariable(value = "hotelId") long hotelId, Model model) {
-		Optional<Hotel> hotel = hotelRepo.findById(hotelId);
-		if (hotel.isPresent()) {
-			model.addAttribute("hotel", hotel.get());
-			return "front/hotel-edit";
-		}
-		return "redirect:/";
+	public ModelAndView hotelDetails(@PathVariable(value = "hotelId") long hotelId, Model model) {
+		return hotelService.showDetail(hotelId);
 	}
 
 	@PostMapping("/edit/{hotelId}")
