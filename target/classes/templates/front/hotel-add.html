@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{front/layouts/main}">
+<div layout:fragment="content">
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h6 class="border-bottom pb-2 mb-2">Добавление нового отеля</h6>
+        <form action="/add" method="post" class="my-4">
+            <div class="mb-3">
+                <label for="nameInput" class="form-label">Название отеля</label>
+                <input name="name" type="text" class="form-control" id="nameInput" aria-describedby="emailHelp">
+                <div id="nameHelp" class="form-text">Полное название отеля</div>
+            </div>
+            <div class="mb-3">
+                <label for="descriptionInput" class="form-label">Описание отеля</label>
+                <input name="description" type="text" class="form-control" id="descriptionInput"
+                       aria-describedby="emailHelp">
+                <div id="descriptionHelp" class="form-text">Опишите расположение, удобства, сервис. Это поможет гостям
+                    быстрее выбрать комфортные условия
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-primary">Сохранить</button>
+        </form>
+    </div>
+
+</div>
+</html>

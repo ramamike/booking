@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<body>
+
+<th:block th:fragment="scripts">
+	<div th:replace="common/fragments/scripts :: scripts"></div>
+	<script th:src="@{/js/front-main.js}" type="text/javascript"></script>
+</th:block>
+
+</body>
+</html>
+

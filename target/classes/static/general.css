@@ -1,0 +1,8 @@
+.layer1 {
+    background-color: #D36037;
+}
+.layer2 {
+    margin-left: 2%;
+    background-color: #ccc;
+    padding: 10px; /* Поля вокруг текста */
+}
