@@ -55,10 +55,7 @@ public class AppController {
 				.description(description)
 				.build();
 
-		hotelService.saveHotel(hotel);
-
-		redirectAttributes.addFlashAttribute("message_success", "Отель " + hotel.getName() + " успешно создан!");
-		return new RedirectView("/", true);
+		return hotelService.saveHotel(hotel, redirectAttributes);
 	}
 
 	@GetMapping("/edit/{hotelId}")
@@ -67,9 +64,12 @@ public class AppController {
 	}
 
 	@PostMapping("/edit/{hotelId}")
-	public ModelAndView hotelUpdate(@PathVariable(value = "hotelId") long hotelId,
-							  @RequestParam String name, @RequestParam String description, Model model) {
+	public RedirectView hotelUpdate( RedirectAttributes redirectAttributes,
+										@PathVariable(value = "hotelId") long hotelId,
+							  			@RequestParam String name, @RequestParam String description,
+									 	Model model) {
 		return hotelService.hotelUpdate(
+				redirectAttributes,
 				hotelId,
 				Hotel.builder()
 					.name(name)

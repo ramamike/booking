@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.Subject;
 import java.util.List;
@@ -37,11 +39,17 @@ public class HotelService {
         return mav;
     }
 
-    public void saveHotel(Hotel hotel){
+    public RedirectView saveHotel(Hotel hotel, RedirectAttributes redirectAttributes){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if("[ROLE_SERVICE_PROVIDER]".equals(authentication.getAuthorities().toString())){
         hotelRepository.save(hotel);
+        redirectAttributes.addFlashAttribute("message_success",
+                "Отель " + hotel.getName() + " успешно создан!");
+        return new RedirectView("/", true);
         }
+        redirectAttributes.addFlashAttribute("message_error",
+                "Отель не создан!");
+        return new RedirectView("/", true);
     }
 
     public ModelAndView showDetail(Long hotelId){
@@ -59,7 +67,7 @@ public class HotelService {
         return new ModelAndView("redirect:/");
     }
 
-    public ModelAndView hotelUpdate(long hotelId, Hotel hotel) {
+    public RedirectView hotelUpdate(RedirectAttributes redirectAttributes, long hotelId, Hotel hotel) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -68,7 +76,13 @@ public class HotelService {
             hotelForUpdate.setName(hotel.getName());
             hotelForUpdate.setDescription(hotel.getDescription());
             hotelRepository.save(hotelForUpdate);
+
+            redirectAttributes.addFlashAttribute("message_success",
+                    "Исправления применены!");
+            return new RedirectView("/", true);
         }
-        return new ModelAndView("redirect:/");
+        redirectAttributes.addFlashAttribute("message_error",
+                "Исправления неприменены!");
+        return new RedirectView("/", true);
     }
 }
