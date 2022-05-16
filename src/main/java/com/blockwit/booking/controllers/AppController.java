@@ -67,13 +67,15 @@ public class AppController {
 	}
 
 	@PostMapping("/edit/{hotelId}")
-	public String hotelUpdate(@PathVariable(value = "hotelId") long hotelId,
+	public ModelAndView hotelUpdate(@PathVariable(value = "hotelId") long hotelId,
 							  @RequestParam String name, @RequestParam String description, Model model) {
-		Hotel hotel = hotelRepo.findById(hotelId).orElseThrow();
-		hotel.setName(name);
-		hotel.setDescription(description);
-		hotelRepo.save(hotel);
-		return "redirect:/";
+		return hotelService.hotelUpdate(
+				hotelId,
+				Hotel.builder()
+					.name(name)
+					.description(description)
+					.build()
+		);
 	}
 
 	@PostMapping("/book/{hotelId}")

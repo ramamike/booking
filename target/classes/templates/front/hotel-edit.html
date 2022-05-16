@@ -5,8 +5,8 @@
 
     <!--/*@thymesVar id="hotel" type="com.blockwit.booking.entity.Hotel"*/-->
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h6 class="border-bottom pb-2 mb-2">Обновлене данных об отеле: <span th:text="${hotel.getName()}"></span></h6>
-        <form action="/edit" method="post" class="my-4">
+        <h6 class="border-bottom pb-2 mb-2">Обновление данных об отеле: <span th:text="${hotel.getName()}"></span></h6>
+        <form th:action="${'/edit/' + hotelId}" method="post" class="my-4">
             <div class="mb-3">
                 <label for="nameInput" class="form-label">Название отеля</label>
                 <input name="name" type="text" class="form-control" id="nameInput" aria-describedby="emailHelp" th:value="${hotel.getName()}">
