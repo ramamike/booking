@@ -2,6 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.repository.HotelRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class HotelService {
 
     private HotelRepository hotelRepository;
@@ -21,11 +23,12 @@ public class HotelService {
 
     public ModelAndView showHotels(String viewName, String attributeName) {
 
+        log.info("showHotels method is invoked");
+
         Iterable<Hotel> hotels = hotelRepository.findAll();
         ModelAndView mav=new ModelAndView();
         mav.setViewName(viewName);
         mav.addObject(attributeName, hotels);
-
         return mav;
     }
 

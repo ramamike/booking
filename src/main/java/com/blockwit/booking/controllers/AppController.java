@@ -4,6 +4,7 @@ import com.blockwit.booking.entity.Booking;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.repository.BookingRepository;
 import com.blockwit.booking.repository.HotelRepository;
+import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,14 +25,13 @@ import java.util.Optional;
 @Controller
 public class AppController {
 
-	@Autowired
 	private HotelService hotelService;
+	private BookingService bookingService;
 
-	@Autowired
-	HotelRepository hotelRepo;
-
-	@Autowired
-	BookingRepository bookingRepo;
+	public AppController(HotelService hotelService, BookingService bookingService) {
+		this.hotelService = hotelService;
+		this.bookingService = bookingService;
+	}
 
 	@GetMapping
 	public ModelAndView home() {
@@ -79,17 +79,8 @@ public class AppController {
 	}
 
 	@PostMapping("/book/{hotelId}")
-	public String bookHotel(@PathVariable(value = "hotelId") long hotelId, Model model) {
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentName = authentication.getName();
-
-		Booking booking = Booking.builder()
-			.nameUser(currentName)
-			.build();
-
-		bookingRepo.save(booking);
-		return "redirect:/";
+	public ModelAndView bookHotel(@PathVariable(value = "hotelId") long hotelId) {
+		return bookingService.bookHotel(hotelId);
 	}
 
 }
