@@ -23,14 +23,17 @@ public class BookingService {
     public ModelAndView bookHotel(long hotelId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentName = authentication.getName();
 
-        Booking booking = Booking.builder()
-                .nameUser(currentName)
-                .build();
+        if("[ROLE_CLIENT]".equals(authentication.getAuthorities().toString())){
+            String currentName = authentication.getName();
 
-        bookingRepository.save(booking);
+            Booking booking = Booking.builder()
+                    .nameUser(currentName)
+                    .hotelId(hotelId)
+                    .build();
 
+            bookingRepository.save(booking);
+        }
         return new ModelAndView("redirect:/");
     }
 

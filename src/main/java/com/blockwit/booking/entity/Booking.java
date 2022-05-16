@@ -30,4 +30,5 @@ public class Booking {
 
     private String nameUser;
 
+    private Long hotelId;
 }

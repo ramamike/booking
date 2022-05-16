@@ -3,12 +3,17 @@ package com.blockwit.booking.service;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.repository.HotelRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.security.auth.Subject;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,7 +38,10 @@ public class HotelService {
     }
 
     public void saveHotel(Hotel hotel){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if("[ROLE_SERVICE_PROVIDER]".equals(authentication.getAuthorities().toString())){
         hotelRepository.save(hotel);
+        }
     }
 
     public ModelAndView showDetail(Long hotelId){
@@ -52,10 +60,15 @@ public class HotelService {
     }
 
     public ModelAndView hotelUpdate(long hotelId, Hotel hotel) {
-        Hotel hotelForUpdate = hotelRepository.findById(hotelId).orElseThrow();
-        hotelForUpdate.setName(hotel.getName());
-        hotelForUpdate.setDescription(hotel.getDescription());
-        hotelRepository.save(hotelForUpdate);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if("[ROLE_SERVICE_PROVIDER]".equals(authentication.getAuthorities().toString())) {
+            Hotel hotelForUpdate = hotelRepository.findById(hotelId).orElseThrow();
+            hotelForUpdate.setName(hotel.getName());
+            hotelForUpdate.setDescription(hotel.getDescription());
+            hotelRepository.save(hotelForUpdate);
+        }
         return new ModelAndView("redirect:/");
     }
 }
