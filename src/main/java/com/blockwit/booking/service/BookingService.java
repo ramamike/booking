@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
@@ -20,21 +18,19 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public ModelAndView bookHotel(long hotelId) {
+    public boolean bookHotel(long hotelId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentName = authentication.getName();
 
-        if("[ROLE_CLIENT]".equals(authentication.getAuthorities().toString())){
-            String currentName = authentication.getName();
+        Booking booking = Booking.builder()
+                .nameUser(currentName)
+                .hotelId(hotelId)
+                .build();
 
-            Booking booking = Booking.builder()
-                    .nameUser(currentName)
-                    .hotelId(hotelId)
-                    .build();
+        Booking result = bookingRepository.save(booking);
 
-            bookingRepository.save(booking);
-        }
-        return new ModelAndView("redirect:/");
+        return result!=null;
     }
 
 }

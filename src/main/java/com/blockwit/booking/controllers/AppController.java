@@ -44,18 +44,25 @@ public class AppController {
 	}
 
 	@PostMapping("/add")
-	public RedirectView hotelAddToDB(HttpServletRequest request,
-							   RedirectAttributes redirectAttributes,
-							   @RequestParam String name,
-							   @RequestParam String description,
-							   Model model) {
+	public RedirectView hotelAddToDB(
+								RedirectAttributes redirectAttributes,
+							    @RequestParam String name,
+							    @RequestParam String description,
+							    Model model) {
 
-		Hotel hotel=Hotel.builder()
+		Hotel hotel = Hotel.builder()
 				.name(name)
 				.description(description)
 				.build();
 
-		return hotelService.saveHotel(hotel, redirectAttributes);
+		if (hotelService.saveHotelResponse(hotel)) {
+			redirectAttributes.addFlashAttribute("message_success",
+					"Отель " + hotel.getName() + " успешно создан!");}
+			else {
+			redirectAttributes.addFlashAttribute("message_error",
+					"Ошибка при создании отеля!");
+			}
+		return new RedirectView("/", true);
 	}
 
 	@GetMapping("/edit/{hotelId}")
@@ -68,19 +75,38 @@ public class AppController {
 										@PathVariable(value = "hotelId") long hotelId,
 							  			@RequestParam String name, @RequestParam String description,
 									 	Model model) {
-		return hotelService.hotelUpdate(
-				redirectAttributes,
-				hotelId,
-				Hotel.builder()
-					.name(name)
-					.description(description)
-					.build()
-		);
+		Hotel hotel = Hotel.builder()
+				.name(name)
+				.description(description)
+				.build();
+		if(hotelService.hotelUpdate(hotelId, hotel)) {
+		redirectAttributes.addFlashAttribute("message_success",
+				"Исправления применены!");
+		}
+		else {
+			redirectAttributes.addFlashAttribute("message_error",
+					"Исправления не применены!");
+		}
+
+		return new RedirectView("/", true);
 	}
 
 	@PostMapping("/book/{hotelId}")
-	public ModelAndView bookHotel(@PathVariable(value = "hotelId") long hotelId) {
-		return bookingService.bookHotel(hotelId);
+	public RedirectView bookHotel(RedirectAttributes redirectAttributes,
+								  @PathVariable(value = "hotelId") long hotelId) {
+
+		bookingService.bookHotel(hotelId);
+
+		if(bookingService.bookHotel(hotelId)) {
+			redirectAttributes.addFlashAttribute("message_success",
+					" Отель забранирован!");
+		}
+		else {
+			redirectAttributes.addFlashAttribute("message_error",
+					"Отель не забранирован!");
+		}
+
+		return new RedirectView("/", true);
 	}
 
 }
