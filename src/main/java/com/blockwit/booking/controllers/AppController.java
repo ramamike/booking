@@ -81,7 +81,7 @@ public class AppController {
 				.build();
 		if(hotelService.hotelUpdate(hotelId, hotel)) {
 		redirectAttributes.addFlashAttribute("message_success",
-				"Исправления применены!");
+				"Информацию об отеле обновили успешно!");
 		}
 		else {
 			redirectAttributes.addFlashAttribute("message_error",
@@ -99,7 +99,7 @@ public class AppController {
 
 		if(bookingService.bookHotel(hotelId)) {
 			redirectAttributes.addFlashAttribute("message_success",
-					" Отель забранирован!");
+					"Отель забранирован!");
 		}
 		else {
 			redirectAttributes.addFlashAttribute("message_error",
@@ -107,6 +107,6 @@ public class AppController {
 		}
 
 		return new RedirectView("/", true);
-	}
+	}                  	
 
 }
