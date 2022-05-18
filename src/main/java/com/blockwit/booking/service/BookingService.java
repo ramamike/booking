@@ -18,7 +18,7 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public boolean bookHotel(long hotelId) {
+    public Booking bookHotel(long hotelId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentName = authentication.getName();
@@ -28,9 +28,7 @@ public class BookingService {
                 .hotelId(hotelId)
                 .build();
 
-        Booking result = bookingRepository.save(booking);
-
-        return result!=null;
+        return bookingRepository.save(booking);
     }
 
 }
