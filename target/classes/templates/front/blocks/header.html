@@ -4,9 +4,8 @@
             <span class="fs-4">Booking</span>
         </a>
         <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-            <a sec:authorize="hasRole('CLIENT')"
-               class="me-3 py-2 text-dark text-decoration-none" href="/hotels">hotels</a>
-            <a sec:authorize="hasRole('SERVICE_PROVIDER')"
+            <a class="me-3 py-2 text-dark text-decoration-none" href="/hotels">hotels</a>
+            <a sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')"
                class="me-3 py-2 text-dark text-decoration-none" href="hotels/add">Add</a>
             <a class="me-3 py-2 text-dark text-decoration-none" href="/">Home</a>
             <a sec:authorize="isAnonymous()"

@@ -21,10 +21,10 @@
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
                     <div class="d-flex justify-content-between">
                         <strong class="text-gray-dark" th:text="${hotel.getName()}"></strong>
-                        <a sec:authorize="hasRole('SERVICE_PROVIDER')"
-                           th:href="'/edit/' + ${hotel.getHotelId()}" class="btn btn-outline-primary">Редактировать</a>
-                        <form sec:authorize="hasRole('CLIENT')"
-                              th:action="'/book/' + ${hotel.getHotelId()}" method="post">
+                        <a sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')"
+                           th:href="'/hotels/edit/' + ${hotel.getHotelId()}" class="btn btn-outline-primary">Редактировать</a>
+                        <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
+                              th:action="'/hotels/book/' + ${hotel.getHotelId()}" method="post">
                             <button class="btn btn-outline-primary" type="submit">
                                 Бронировать для <span sec:authentication="name"/></button>
                         </form>

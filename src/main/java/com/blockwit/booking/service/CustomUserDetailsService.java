@@ -2,6 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.repository.UserRepository;
+import com.blockwit.booking.security.CustomUserDetail;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,10 +23,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         User userFormRepo = userRepository.findByEmail(username)
                 .orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(userFormRepo.getEmail())
-                .password(userFormRepo.getPassword())
-                .authorities("USER")
-                .build();
+        return new CustomUserDetail(userFormRepo);
     }
 }
