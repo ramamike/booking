@@ -88,7 +88,7 @@ public class AppController {
 
 		bookingService.bookHotel(hotelId);
 
-		if (bookingService.bookHotel(hotelId)) {
+		if (bookingService.bookHotel(hotelId)!=null) {
 			redirectAttributes.addFlashAttribute("message_success",
 				"Отель забранирован!");
 		} else {
