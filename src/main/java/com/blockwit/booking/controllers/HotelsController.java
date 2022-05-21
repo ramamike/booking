@@ -6,28 +6,26 @@ import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-public class AppController {
+@RequestMapping("/hotels")
+public class HotelsController {
 
 	private HotelService hotelService;
 	private BookingService bookingService;
 
-	public AppController(HotelService hotelService, BookingService bookingService) {
+	public HotelsController(HotelService hotelService, BookingService bookingService) {
 		this.hotelService = hotelService;
 		this.bookingService = bookingService;
 	}
 
 	@GetMapping
 	public ModelAndView home() {
-		return hotelService.showHotels("front/home", "hotels");
+		return hotelService.showHotels("front/hotels", "hotels");
 	}
 
 	@GetMapping("/add")
