@@ -13,45 +13,37 @@ import java.util.Optional;
 @Slf4j
 public class HotelService {
 
-	private HotelRepository hotelRepository;
+    private HotelRepository hotelRepository;
 
-	public HotelService(HotelRepository hotelRepository) {
-		this.hotelRepository = hotelRepository;
-	}
+    public HotelService(HotelRepository hotelRepository) {
+        this.hotelRepository = hotelRepository;
+    }
 
-	public ModelAndView showHotels(String viewName, String attributeName) {
+    public ModelAndView showHotels(String viewName, String attributeName) {
 
-		Iterable<Hotel> hotels = hotelRepository.findAll();
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName(viewName);
-		mav.addObject(attributeName, hotels);
-		return mav;
-	}
+        Iterable<Hotel> hotels = hotelRepository.findAll();
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName(viewName);
+        mav.addObject(attributeName, hotels);
+        return mav;
+    }
 
-	public boolean saveHotelResponse(Hotel hotel) {
-		Hotel result = hotelRepository.save(hotel);
-		return result != null;
-	}
+    public boolean saveHotelResponse(Hotel hotel) {
+        Hotel result = hotelRepository.save(hotel);
+        return result != null;
+    }
 
-	public ModelAndView showDetail(Long hotelId) {
+    public Hotel showDetail(Long hotelId) throws HotelNotFoundException {
 
-		Optional<Hotel> hotel = hotelRepository.findById(hotelId);
+        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
 
-		ModelAndView mav = new ModelAndView();
-		if (hotel.isPresent()) {
-			mav.setViewName("front/hotel-edit");
-			mav.addObject("hotel", hotel.get());
-			mav.addObject("hotelId", String.valueOf(hotelId));
-			return mav;
-		}
+        return hotel;
+    }
 
-		return new ModelAndView("redirect:/");
-	}
-
-	public Hotel hotelUpdate(long hotelId, Hotel hotel) throws HotelNotFoundException {
-		Hotel hotelForUpdate = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
-		hotelForUpdate.setName(hotel.getName());
-		hotelForUpdate.setDescription(hotel.getDescription());
-		return hotelRepository.save(hotelForUpdate);
-	}
+    public Hotel hotelUpdate(long hotelId, Hotel hotel) throws HotelNotFoundException {
+        Hotel hotelForUpdate = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
+        hotelForUpdate.setName(hotel.getName());
+        hotelForUpdate.setDescription(hotel.getDescription());
+        return hotelRepository.save(hotelForUpdate);
+    }
 }

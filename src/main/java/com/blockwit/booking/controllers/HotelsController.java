@@ -15,86 +15,103 @@ import org.springframework.web.servlet.view.RedirectView;
 @RequestMapping("/hotels")
 public class HotelsController {
 
-	private HotelService hotelService;
-	private BookingService bookingService;
+    private HotelService hotelService;
+    private BookingService bookingService;
 
-	public HotelsController(HotelService hotelService, BookingService bookingService) {
-		this.hotelService = hotelService;
-		this.bookingService = bookingService;
-	}
+    public HotelsController(HotelService hotelService, BookingService bookingService) {
+        this.hotelService = hotelService;
+        this.bookingService = bookingService;
+    }
 
-	@GetMapping
-	public ModelAndView home() {
-		return hotelService.showHotels("front/hotels", "hotels");
-	}
+    @GetMapping
+    public ModelAndView home() {
+        return hotelService.showHotels("front/hotels", "hotels");
+    }
 
-	@GetMapping("/add")
-	public String hotelAdd() {
-		return "front/hotel-add";
-	}
+    @GetMapping("/add")
+    public String hotelAdd() {
+        return "front/hotel-add";
+    }
 
-	@PostMapping("/add")
-	public RedirectView hotelAddToDB(
-		RedirectAttributes redirectAttributes,
-		@RequestParam String name,
-		@RequestParam String description,
-		Model model) {
+    @PostMapping("/add")
+    public RedirectView hotelAddToDB(
+            RedirectAttributes redirectAttributes,
+            @RequestParam String name,
+            @RequestParam String description,
+            Model model) {
 
-		Hotel hotel = Hotel.builder()
-			.name(name)
-			.description(description)
-			.build();
+        Hotel hotel = Hotel.builder()
+                .name(name)
+                .description(description)
+                .build();
 
-		if (hotelService.saveHotelResponse(hotel)) {
-			redirectAttributes.addFlashAttribute("message_success",
-				"Отель " + hotel.getName() + " успешно создан!");
-		} else {
-			redirectAttributes.addFlashAttribute("message_error",
-				"Ошибка при создании отеля!");
-		}
-		return new RedirectView("/", true);
-	}
+        if (hotelService.saveHotelResponse(hotel)) {
+            redirectAttributes.addFlashAttribute("message_success",
+                    "Отель " + hotel.getName() + " успешно создан!");
+        } else {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Ошибка при создании отеля!");
+        }
+        return new RedirectView("/", true);
+    }
 
-	@GetMapping("/edit/{hotelId}")
-	public ModelAndView hotelDetails(@PathVariable(value = "hotelId") long hotelId, Model model) {
-		return hotelService.showDetail(hotelId);
-	}
+    @GetMapping("/edit/{hotelId}")
+    public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
+                                     @PathVariable(value = "hotelId") long hotelId, Model model) {
 
-	@PostMapping("/edit/{hotelId}")
-	public RedirectView hotelUpdate(RedirectAttributes redirectAttributes,
-									@PathVariable(value = "hotelId") long hotelId,
-									@RequestParam String name, @RequestParam String description,
-									Model model) {
-		Hotel hotel = Hotel.builder()
-			.name(name)
-			.description(description)
-			.build();
+        Hotel hotel = null;
+        try {
+            hotel = hotelService.showDetail(hotelId);
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
+        }
 
-		try {
-			hotelService.hotelUpdate(hotelId, hotel);
-			redirectAttributes.addFlashAttribute("message_success", "Информацию об отеле обновили успешно!");
-		} catch (HotelNotFoundException e) {
-			redirectAttributes.addFlashAttribute("message_error", "К сожалению, не удалось обновить информацию об отеле!");
-		}
+        ModelAndView mav = new ModelAndView();
+        if (hotel != null) {
+            mav.setViewName("front/hotel-edit");
+            mav.addObject("hotel", hotel);
+            mav.addObject("hotelId", String.valueOf(hotelId));
+            return mav;
+        }
 
-		return new RedirectView("/", true);
-	}
+        return new ModelAndView("redirect:/");
+    }
 
-	@PostMapping("/book/{hotelId}")
-	public RedirectView bookHotel(RedirectAttributes redirectAttributes,
-								  @PathVariable(value = "hotelId") long hotelId) {
+    @PostMapping("/edit/{hotelId}")
+    public RedirectView hotelUpdate(RedirectAttributes redirectAttributes,
+                                    @PathVariable(value = "hotelId") long hotelId,
+                                    @RequestParam String name, @RequestParam String description,
+                                    Model model) {
+        Hotel hotel = Hotel.builder()
+                .name(name)
+                .description(description)
+                .build();
 
-		bookingService.bookHotel(hotelId);
+        try {
+            hotelService.hotelUpdate(hotelId, hotel);
+            redirectAttributes.addFlashAttribute("message_success", "Информацию об отеле обновили успешно!");
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению, не удалось обновить информацию об отеле!");
+        }
 
-		if (bookingService.bookHotel(hotelId)!=null) {
-			redirectAttributes.addFlashAttribute("message_success",
-				"Отель забранирован!");
-		} else {
-			redirectAttributes.addFlashAttribute("message_error",
-				"Отель не забранирован!");
-		}
+        return new RedirectView("/", true);
+    }
 
-		return new RedirectView("/", true);
-	}
+    @PostMapping("/book/{hotelId}")
+    public RedirectView bookHotel(RedirectAttributes redirectAttributes,
+                                  @PathVariable(value = "hotelId") long hotelId) {
+
+        try {
+            bookingService.bookHotel(hotelId);
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
+            return new RedirectView("/", true);
+        }
+
+        redirectAttributes.addFlashAttribute("message_success",
+                "Отель забранирован!");
+
+        return new RedirectView("/", true);
+    }
 
 }
