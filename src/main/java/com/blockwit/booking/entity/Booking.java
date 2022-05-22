@@ -17,15 +17,7 @@ import javax.persistence.*;
 @Table(name="tbl_booking")
 public class Booking {
     @Id
-    @SequenceGenerator(
-            name = "booking_sequence",
-            sequenceName ="booking_sequence" ,
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "booking_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
 
     private String nameUser;

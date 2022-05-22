@@ -16,15 +16,7 @@ import javax.persistence.*;
 public class Hotel {
 
     @Id
-    @SequenceGenerator(
-            name = "hotel_sequence",
-            sequenceName ="hotel_sequence" ,
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "hotel_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hotelId;
 
     private String name;
