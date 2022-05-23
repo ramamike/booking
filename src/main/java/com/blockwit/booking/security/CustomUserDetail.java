@@ -1,5 +1,6 @@
 package com.blockwit.booking.security;
 
+import com.blockwit.booking.entity.RoleEntity;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.model.Role;
 import com.blockwit.booking.model.Status;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class CustomUserDetail implements UserDetails {
@@ -23,9 +25,11 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Role role= user.getRole();
+        Set<RoleEntity> roles= user.getRoles();
         List<SimpleGrantedAuthority> authorities=new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(role.name()));
+        for(RoleEntity role : roles) {
+           authorities.add(new SimpleGrantedAuthority(role.getRole().name()));
+        }
         return authorities;
     }
 

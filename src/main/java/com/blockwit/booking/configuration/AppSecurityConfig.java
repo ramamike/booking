@@ -52,7 +52,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/hotels").authenticated()
                 .antMatchers("/hotels/book/*").hasAnyAuthority("CLIENT", "ADMIN")
-                .antMatchers("/hotels/add").hasAuthority("ADMIN")
+                .antMatchers("/hotels/add").hasAnyAuthority("CREATOR", "ADMIN")
                 .antMatchers("/hotels/edit/*").hasAnyAuthority("EDITOR", "ADMIN")
                 .anyRequest().permitAll()
                 .and().logout()
