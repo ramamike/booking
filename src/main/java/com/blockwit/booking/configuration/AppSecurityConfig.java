@@ -55,12 +55,15 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/hotels/add").hasAnyAuthority("CREATOR", "ADMIN")
                 .antMatchers("/hotels/edit/*").hasAnyAuthority("EDITOR", "ADMIN")
                 .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/app/login").permitAll()
+                .defaultSuccessUrl("/")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/")
-                .and().formLogin();
+                .logoutSuccessUrl("/");
     }
 }
