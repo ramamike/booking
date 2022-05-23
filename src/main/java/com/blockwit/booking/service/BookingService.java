@@ -5,6 +5,7 @@ import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.repository.BookingRepository;
 import com.blockwit.booking.repository.HotelRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,15 +14,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class BookingService {
 
     private BookingRepository bookingRepository;
     private HotelRepository hotelRepository;
-
-    public BookingService(BookingRepository bookingRepository, HotelRepository hotelRepository) {
-        this.bookingRepository = bookingRepository;
-        this.hotelRepository = hotelRepository;
-    }
 
     public Hotel bookHotel(long hotelId) throws HotelNotFoundException {
 

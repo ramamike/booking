@@ -4,6 +4,7 @@ import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +14,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/hotels")
+@AllArgsConstructor
 public class HotelsController {
 
     private HotelService hotelService;
     private BookingService bookingService;
-
-    public HotelsController(HotelService hotelService, BookingService bookingService) {
-        this.hotelService = hotelService;
-        this.bookingService = bookingService;
-    }
 
     @GetMapping
     public ModelAndView showHotels() {
