@@ -2,9 +2,12 @@ package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -98,10 +101,16 @@ public class HotelsController {
     public RedirectView bookHotel(RedirectAttributes redirectAttributes,
                                   @PathVariable(value = "hotelId") long hotelId) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String clientName = authentication.getName();
+
         try {
-            bookingService.bookHotel(hotelId);
+            bookingService.bookHotel(hotelId, clientName);
         } catch (HotelNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
+            return new RedirectView("/", true);
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению пользователь не найден!");
             return new RedirectView("/", true);
         }
 

@@ -19,7 +19,7 @@ public class RoleEntity {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    private Long id;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role", columnDefinition = "varchar(20) default 'USER'")

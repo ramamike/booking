@@ -17,10 +17,11 @@ import javax.persistence.*;
 @Table(name="tbl_booking")
 public class Booking {
     @Id
+    @Column(name = "booking_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookingId;
-
-    private String nameUser;
+    private Long id;
 
     private Long hotelId;
+
+    private Long userId;
 }
