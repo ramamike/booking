@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -19,13 +18,8 @@ public class HotelService {
         this.hotelRepository = hotelRepository;
     }
 
-    public ModelAndView showHotels(String viewName, String attributeName) {
-
-        Iterable<Hotel> hotels = hotelRepository.findAll();
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(attributeName, hotels);
-        return mav;
+    public Iterable<Hotel> hotels() {
+        return hotelRepository.findAll();
     }
 
     public boolean saveHotelResponse(Hotel hotel) {

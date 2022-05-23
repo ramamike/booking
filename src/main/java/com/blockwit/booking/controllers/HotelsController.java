@@ -24,8 +24,11 @@ public class HotelsController {
     }
 
     @GetMapping
-    public ModelAndView home() {
-        return hotelService.showHotels("front/hotels", "hotels");
+    public ModelAndView showHotels() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/front/hotels");
+        mav.addObject("hotels", hotelService.hotels());
+        return mav;
     }
 
     @GetMapping("/add")
