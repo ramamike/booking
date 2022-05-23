@@ -37,7 +37,7 @@ public class HotelsController {
     }
 
     @PostMapping("/add")
-    public RedirectView hotelAddToDB(
+    public RedirectView hotelPost(
             RedirectAttributes redirectAttributes,
             @RequestParam String name,
             @RequestParam String description,
@@ -65,16 +65,13 @@ public class HotelsController {
         Hotel hotel = null;
         try {
             hotel = hotelService.showDetail(hotelId);
-        } catch (HotelNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
-        }
-
-        ModelAndView mav = new ModelAndView();
-        if (hotel != null) {
+            ModelAndView mav = new ModelAndView();
             mav.setViewName("front/hotel-edit");
             mav.addObject("hotel", hotel);
             mav.addObject("hotelId", String.valueOf(hotelId));
             return mav;
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
         }
 
         return new ModelAndView("redirect:/");
