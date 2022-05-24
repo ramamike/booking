@@ -36,16 +36,16 @@ public class NewAccount {
   @Pattern(regexp = Constants.REGEXP_LOGIN, message = "{model.newaccount.login.regexp.error}")
   private String login;
 
-//  @NotNull
-//  @Email(message = "{model.newaccount.email.regexp.error}")
-//  private String email;
-//
-//  @NotNull
-//  @Pattern(regexp = Constants.REGEXP_PASSWORD, message = "{model.newaccount.pwd.regexp.error}")
-//  private String password;
-//
-//  @NotNull
-//  @Pattern(regexp = Constants.REGEXP_PASSWORD, message = "{model.newaccount.repwd.regexp.error}")
-//  private String repassword;
+  @NotNull
+  @Email(message = "{model.newaccount.email.regexp.error}")
+  private String email;
+
+  @NotNull
+  @Pattern(regexp = Constants.REGEXP_PASSWORD, message = "{model.newaccount.pwd.regexp.error}")
+  private String password;
+
+  @NotNull
+  @Pattern(regexp = Constants.REGEXP_PASSWORD, message = "{model.newaccount.repwd.regexp.error}")
+  private String repassword;
 
 }
