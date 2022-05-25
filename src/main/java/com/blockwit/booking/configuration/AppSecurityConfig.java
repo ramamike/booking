@@ -58,12 +58,14 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/app/login").permitAll()
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/hotels")
                 .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/");
+        // TODO logout should has POST http method for this should be use form in html or some tricks
+        //  .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
     }
 }

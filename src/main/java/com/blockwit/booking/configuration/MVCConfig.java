@@ -39,14 +39,14 @@ public class MVCConfig implements WebMvcConfigurer {
 		WebContentInterceptor interceptor = new WebContentInterceptor();
 		interceptor.addCacheMapping(CacheControl.maxAge(365, TimeUnit.DAYS)
 			.noTransform()
-			.mustRevalidate(), "/css/*", "/js/**", "/img/**", "/webjars/**", "/login", "/logout");
+			.mustRevalidate(), "/css/*", "/js/**", "/img/**", "/webjars/**", "/app/login", "/logout");
 		registry.addInterceptor(interceptor);
 
 		registry.addInterceptor(appInterceptor).addPathPatterns(
 			"/",
-			"/add",
-			"/edit/**",
-			"/book/**"
+			"/hotels/add",
+			"/hotels/edit/**",
+			"/hotels/book/**"
 		);
 	}
 
