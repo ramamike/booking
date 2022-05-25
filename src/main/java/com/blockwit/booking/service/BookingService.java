@@ -24,14 +24,14 @@ public class BookingService {
     private UserRepository userRepository;
 
 
-    public Hotel bookHotel(long hotelId, String clientName)
+    public Hotel bookHotel(long hotelId, String userName)
             throws HotelNotFoundException, UserNotFoundException {
 
         //check if hotel is existed
         Hotel hotelForBook = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new HotelNotFoundException());
 
-        Long userId = userRepository.getUserByEmail(clientName)
+        Long userId = userRepository.getUserByUsername(userName)
                 .orElseThrow(() -> new UserNotFoundException()).getId();
 
         Booking booking = Booking.builder()

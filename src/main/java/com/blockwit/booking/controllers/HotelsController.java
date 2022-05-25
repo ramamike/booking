@@ -102,10 +102,10 @@ public class HotelsController {
                                   @PathVariable(value = "hotelId") long hotelId) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String clientName = authentication.getName();
+        String userName = authentication.getName();
 
         try {
-            bookingService.bookHotel(hotelId, clientName);
+            bookingService.bookHotel(hotelId, userName);
         } catch (HotelNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
             return new RedirectView("/", true);

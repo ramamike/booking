@@ -22,7 +22,7 @@ public class RoleEntity {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "role", columnDefinition = "varchar(20) default 'USER'")
+    @Column(name = "role", columnDefinition = "varchar(20) default 'CLIENT'")
     @NotNull
     private Role role;
 }

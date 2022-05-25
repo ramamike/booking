@@ -24,20 +24,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, name = "email")
-    @NotNull
+    @Column(name = "username", length = 100, nullable = false, unique = true)
+    private String userName;
+
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "firstName")
-    @NotNull
-    private String firstName;
-
-    @Column(name = "lastName")
-    @NotNull
-    private String lastName;
-
-    @Column(name = "password")
-    @NotNull
+    @Column(nullable = false, name = "password")
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
