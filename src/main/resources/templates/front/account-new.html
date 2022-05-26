@@ -8,7 +8,7 @@
 <div layout:fragment="content">
     <div class="container bs-authreg-container mt-5">
         <h2 class="mb-4">New Account</h2>
-        <form th:action="@{/panel/accounts/create}" method="POST" class="form-vertical" role="form"
+        <form th:action="@{/app/accounts/create}" method="POST" class="form-vertical" role="form"
               th:object="${newAccount}">
             <div class="form-group" id="username_field">
                 <label for="login">Login</label>
