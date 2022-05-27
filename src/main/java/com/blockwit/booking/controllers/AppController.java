@@ -1,8 +1,11 @@
 package com.blockwit.booking.controllers;
 
+import com.blockwit.booking.entity.User;
+import com.blockwit.booking.model.Error;
 import com.blockwit.booking.model.NewAccount;
 import com.blockwit.booking.service.UserService;
 import com.blockwit.booking.validator.NewAccountValidator;
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -59,10 +62,19 @@ public class AppController {
                     bindingResult.getModel(), HttpStatus.BAD_REQUEST);
 
         log.info("Create account");
-        userService.createAccount(newAccount.getLogin(),
-                newAccount.getEmail(),
-                newAccount.getPassword());
-        return new ModelAndView("redirect:/");
+        Either<Error, User> accountEither = userService.createAccount(newAccount.getLogin(),
+                                                                        newAccount.getEmail(),
+                                                                        newAccount.getPassword());
+
+        if(accountEither.isLeft()){
+            redirectAttributes.addFlashAttribute("message_error",
+                                            accountEither.getLeft().getDescr());
+        } else {
+            redirectAttributes.addFlashAttribute("message_success",
+                                    newAccount.getLogin()+" создан!");
+        }
+
+        return new ModelAndView("redirect:/app/accounts/create");
     }
 
 }
