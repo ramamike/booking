@@ -2,7 +2,6 @@ package com.blockwit.booking.security;
 
 import com.blockwit.booking.entity.RoleEntity;
 import com.blockwit.booking.entity.User;
-import com.blockwit.booking.model.Role;
 import com.blockwit.booking.model.Status;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +27,7 @@ public class CustomUserDetail implements UserDetails {
         Set<RoleEntity> roles= user.getRoles();
         List<SimpleGrantedAuthority> authorities=new ArrayList<>();
         for(RoleEntity role : roles) {
-           authorities.add(new SimpleGrantedAuthority(role.getRole().name()));
+           authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authorities;
     }

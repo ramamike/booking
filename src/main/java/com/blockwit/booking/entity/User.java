@@ -1,6 +1,5 @@
 package com.blockwit.booking.entity;
 
-import com.blockwit.booking.model.Role;
 import com.blockwit.booking.model.Status;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;

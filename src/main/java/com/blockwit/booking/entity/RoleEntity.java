@@ -1,6 +1,5 @@
 package com.blockwit.booking.entity;
 
-import com.blockwit.booking.model.Role;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +20,7 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
     @Column(name = "role", columnDefinition = "varchar(20) default 'CLIENT'")
     @NotNull
-    private Role role;
+    private String name;
 }

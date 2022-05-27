@@ -1,17 +1,13 @@
 package com.blockwit.booking.service;
 
-import com.blockwit.booking.entity.RoleEntity;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.model.Error;
-import com.blockwit.booking.model.Role;
 import com.blockwit.booking.repository.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.EnumSet;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
