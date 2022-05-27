@@ -38,7 +38,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<RoleEntity> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "status", columnDefinition = "varchar(20) default 'ACTIVE'")

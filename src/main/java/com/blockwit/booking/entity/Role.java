@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "tbl_roles")
-public class RoleEntity {
+public class Role {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +22,5 @@ public class RoleEntity {
 
     @Column(name = "role", columnDefinition = "varchar(20) default 'CLIENT'")
     @NotNull
-    private String name;
+    private String role;
 }

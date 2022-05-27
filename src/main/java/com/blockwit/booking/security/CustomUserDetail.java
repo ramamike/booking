@@ -1,6 +1,6 @@
 package com.blockwit.booking.security;
 
-import com.blockwit.booking.entity.RoleEntity;
+import com.blockwit.booking.entity.Role;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.model.Status;
 import lombok.Data;
@@ -24,10 +24,10 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<RoleEntity> roles= user.getRoles();
+        Set<Role> roles= user.getRoles();
         List<SimpleGrantedAuthority> authorities=new ArrayList<>();
-        for(RoleEntity role : roles) {
-           authorities.add(new SimpleGrantedAuthority(role.getName()));
+        for(Role role : roles) {
+           authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
         return authorities;
     }

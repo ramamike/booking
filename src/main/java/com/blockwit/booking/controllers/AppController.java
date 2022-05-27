@@ -1,6 +1,7 @@
 package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.RoleNotFoundException;
 import com.blockwit.booking.model.Error;
 import com.blockwit.booking.model.NewAccount;
 import com.blockwit.booking.service.UserService;
@@ -62,16 +63,17 @@ public class AppController {
                     bindingResult.getModel(), HttpStatus.BAD_REQUEST);
 
         log.info("Create account");
-        Either<Error, User> accountEither = userService.createAccount(newAccount.getLogin(),
-                                                                        newAccount.getEmail(),
-                                                                        newAccount.getPassword());
+        Either<Error, User> accountEither = userService.createAccount(
+                newAccount.getLogin(),
+                newAccount.getEmail(),
+                newAccount.getPassword());
 
-        if(accountEither.isLeft()){
+        if (accountEither.isLeft()) {
             redirectAttributes.addFlashAttribute("message_error",
-                                            accountEither.getLeft().getDescr());
+                    accountEither.getLeft().getDescr());
         } else {
             redirectAttributes.addFlashAttribute("message_success",
-                                    newAccount.getLogin()+" создан!");
+                    newAccount.getLogin() + " создан!");
         }
 
         return new ModelAndView("redirect:/app/accounts/create");

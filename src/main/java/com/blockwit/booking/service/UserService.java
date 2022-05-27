@@ -1,12 +1,16 @@
 package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.RoleNotFoundException;
 import com.blockwit.booking.model.Error;
+import com.blockwit.booking.model.Status;
 import com.blockwit.booking.repository.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 
 @Service
@@ -15,6 +19,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private UserRepository userRepository;
+
+    private RoleService roleService;
 
     public Either<Error, User> createAccount(String inLogin,
                                              String inEmail,
@@ -34,6 +40,8 @@ public class UserService {
         return Either.right(userRepository.save(User.builder()
                 .userName(login)
                 .email(email)
+                .roles(Set.of(roleService.getRole("CLIENT")))
+                .status(Status.ACTIVE)
                 .password(password)
                 .build()));
     }
