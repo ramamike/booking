@@ -29,8 +29,8 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, name = "password")
-    private String password;
+    @Column(nullable = false, name = "password", length = 60)
+    private String hashPassword;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(

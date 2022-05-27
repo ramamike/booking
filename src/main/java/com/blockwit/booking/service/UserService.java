@@ -8,6 +8,7 @@ import com.blockwit.booking.repository.UserRepository;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -21,6 +22,8 @@ public class UserService {
     private UserRepository userRepository;
 
     private RoleService roleService;
+
+    private final PasswordEncoder passwordEncoder;
 
     public Either<Error, User> createAccount(String inLogin,
                                              String inEmail,
@@ -42,7 +45,7 @@ public class UserService {
                 .email(email)
                 .roles(Set.of(roleService.getRole("CLIENT")))
                 .status(Status.ACTIVE)
-                .password(password)
+                .hashPassword(passwordEncoder.encode(password))
                 .build()));
     }
 
