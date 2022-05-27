@@ -39,7 +39,6 @@ public abstract class CommonValidator implements Validator {
 	@Override
 	public void validate(Object o, Errors errors) {
 		Set<ConstraintViolation<Object>> validates = javaxValidator.validate(o);
-		validates.stream().forEach(cv -> errors.rejectValue(cv.getPropertyPath().toString(), "", cv.getMessage()));
 		performValidate(o, errors);
 	}
 
