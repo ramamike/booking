@@ -1,5 +1,6 @@
 package com.blockwit.booking.service;
 
+import com.blockwit.booking.entity.Role;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.RoleNotFoundException;
 import com.blockwit.booking.model.Error;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -27,7 +29,8 @@ public class UserService {
 
     public Either<Error, User> createAccount(String inLogin,
                                              String inEmail,
-                                             String password) {
+                                             String password,
+                                             boolean serviceProvider) {
         String login = inLogin.trim().toLowerCase();
         String email = inEmail.trim().toLowerCase();
 
@@ -40,10 +43,19 @@ public class UserService {
             log.trace("Email: " + email + " already exists!");
             return Either.left(new Error(Error.EC_EMAIL_EXISTS, Error.EM_EMAIL_EXISTS + email));
         }
+
+        Set<Role> rolesForAccount;
+        if (serviceProvider) {
+            rolesForAccount = Set.of(roleService.getRole("CREATOR"),
+                    roleService.getRole("EDITOR"));
+        } else {
+            rolesForAccount = Set.of(roleService.getRole("CLIENT"));
+        }
+
         return Either.right(userRepository.save(User.builder()
                 .userName(login)
                 .email(email)
-                .roles(Set.of(roleService.getRole("CLIENT")))
+                .roles(rolesForAccount)
                 .status(Status.ACTIVE)
                 .hashPassword(passwordEncoder.encode(password))
                 .build()));

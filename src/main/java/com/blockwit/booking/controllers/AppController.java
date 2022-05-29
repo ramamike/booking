@@ -66,7 +66,8 @@ public class AppController {
         Either<Error, User> accountEither = userService.createAccount(
                 newAccount.getLogin(),
                 newAccount.getEmail(),
-                newAccount.getPassword());
+                newAccount.getPassword(),
+                newAccount.isServiceProvider());
 
         if (accountEither.isLeft()) {
             redirectAttributes.addFlashAttribute("message_error",
