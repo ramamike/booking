@@ -44,4 +44,5 @@ public class User {
     @Column(name = "status", columnDefinition = "varchar(20) default 'ACTIVE'")
     @NotNull
     private Status status;
+
 }

@@ -27,9 +27,9 @@ public class UserDataInitializer {
     public void initAdmin() {
 
         try {
-            if (userRepository.getUserByUsername("ADMIN").isEmpty()) {
+            if (userRepository.getUserByUsername("admin").isEmpty()) {
                 userRepository.save(User.builder()
-                        .userName("defaultAdmin")
+                        .userName("admin")
                         .email("default@mail.com")
                         .roles(Set.of(roleService.getRole("ADMIN")))
                         .status(Status.ACTIVE)

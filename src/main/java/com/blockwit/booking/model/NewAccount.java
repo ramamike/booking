@@ -48,4 +48,5 @@ public class NewAccount {
   @Pattern(regexp = Constants.REGEXP_PASSWORD, message = "{model.newaccount.repwd.regexp.error}")
   private String repassword;
 
+  private boolean serviceProvider;
 }

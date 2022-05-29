@@ -32,6 +32,11 @@
                 <input type="password" id="repassword" name="repassword" class="form-control">
                 <td th:if="${#fields.hasErrors('repassword')}" th:errors="*{repassword}">Retype password error</td>
             </div>
+            <div>
+                <label>hotel stuff:
+                    <input type="checkbox" name="serviceProvider" th:value="*{serviceProvider}"/>
+                </label>
+            </div>
             <div class="form-group mt-5">
                 <button type="submit" class="btn btn-outline-primary btn-block">Create</button>
             </div>

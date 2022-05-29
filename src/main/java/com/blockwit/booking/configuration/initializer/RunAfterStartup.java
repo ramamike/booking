@@ -16,7 +16,6 @@ public class RunAfterStartup {
 
     @EventListener(ApplicationReadyEvent.class)
         public void runAfterStartup(){
-        System.out.println("run after startup");
         roleDataInitializer.initRoles();
         userDataInitializer.initAdmin();
     }
