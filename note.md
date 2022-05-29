@@ -1,4 +1,5 @@
 mvn install
+ssh ramamike@ramamike.blockwit.io
 ps aux | grep booking
 kill <pid>
 ./start.sh
