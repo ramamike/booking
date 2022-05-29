@@ -1,4 +1,4 @@
-package com.blockwit.booking.configuration.initializer;
+package com.blockwit.booking.configuration.initializer.model;
 
 import com.blockwit.booking.entity.Role;
 import com.blockwit.booking.repository.RoleRepository;
@@ -34,9 +34,10 @@ public class RoleDataInitializer {
             try {
                 if (!roleRepository.existsByRole(roleName)) {
                     roles.add(Role.builder().role(roleName).build());
+                    log.info("Role initialising for:" + roleName);
                 }
             } catch (Exception e) {
-                log.error("exception during a role search by name", e);
+                log.error("initialization: exception during a role searching by name", e);
             }
         });
 
