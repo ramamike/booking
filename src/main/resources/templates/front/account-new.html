@@ -1,39 +1,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{front/layouts/main}">
-<head>
-</head>
-<body>
 <div layout:fragment="content">
-    <div class="container bs-authreg-container mt-5">
-        <h2 class="mb-4">New Account</h2>
-        <form th:action="@{/app/accounts/create}" method="POST" class="form-vertical" role="form"
+
+    <!--/*@thymesVar id="hotel" type="com.blockwit.booking.entity.Hotel"*/-->
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h6 class="border-bottom pb-2 mb-2">Новый пользователь: </h6>
+        <form th:action="@{/app/accounts/create}" method="post" class="my-4"
               th:object="${newAccount}">
-            <div class="form-group" id="username_field">
-                <label for="login">Login</label>
-                <input type="text" id="login" name="login" th:value="*{login}" minlength="3" maxlength="50"
-                       required="true"
-                       class="form-control">
+            <div class="mb-3">
+                <label for="loginInput" class="form-label">Login</label>
+                <input name="login" type="text" class="form-control"
+                       id="loginInput" aria-describedby="loginHelp"
+                       th:value="*{login}">
                 <td th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login error</td>
+                <div id="loginHelp" class="form-text">Имя пользователя</div>
             </div>
-            <div class="form-group" id="email_field">
-                <label for="email">Email</label>
-                <input type="text" id="email" name="email" th:value="*{email}" class="form-control">
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Email</label>
+                <input name="email" type="text" class="form-control"
+                       id="emailInput" aria-describedby="emailHelp"
+                       th:value="*{email}">
                 <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</td>
+                <div id="emailHelp" class="form-text">Адресс электронной почты</div>
             </div>
-            <div class="form-group" id="password_field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control">
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Password</label>
+                <input name="password" type="text" class="form-control"
+                       id="passwordInput" aria-describedby="passwordHelp"
+                       th:value="*{password}">
                 <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</td>
+                <div id="passwordHelp" class="form-text">Пароль</div>
             </div>
-            <div class="form-group" id="repassword_field">
-                <label for="repassword">Retype password</label>
-                <input type="password" id="repassword" name="repassword" class="form-control">
-                <td th:if="${#fields.hasErrors('repassword')}" th:errors="*{repassword}">
-                    Retype password error
-                </td>
+            <div class="mb-3">
+                <label for="repasswordInput" class="form-label">Repassword</label>
+                <input name="repassword" type="text" class="form-control"
+                       id="repasswordInput" aria-describedby="repasswordHelp"
+                       th:value="*{repassword}">
+                <td th:if="${#fields.hasErrors('repassword')}" th:errors="*{repassword}">Repassword error</td>
+                <div id="repasswordHelp" class="form-text">Подвтерждение пароля</div>
             </div>
+
             <div>
                 <label>hotel stuff:
                     <input type="checkbox" name="serviceProvider"
@@ -43,9 +50,9 @@
             <div class="form-group mt-5">
                 <button type="submit" class="btn btn-outline-primary btn-block">Create</button>
             </div>
+
         </form>
     </div>
-</div>
-</body>
-</html>
 
+</div>
+</html>
