@@ -19,15 +19,18 @@
                 </svg>
 
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                    <div class="d-flex justify-content-between">
+                    <div>
                         <strong class="text-gray-dark" th:text="${hotel.getName()}"></strong>
-                        <a sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')"
-                           th:href="'/hotels/edit/' + ${hotel.getId()}" class="btn btn-outline-primary">Редактировать</a>
-                        <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
-                              th:action="'/hotels/book/' + ${hotel.getId()}" method="post">
-                            <button class="btn btn-outline-primary" type="submit">
-                                Бронировать для <span sec:authentication="name"/></button>
-                        </form>
+                        <div class="d-flex justify-content-end">
+                            <a sec:authorize="hasAnyAuthority('EDITOR', 'ADMIN')"
+                               th:href="'/hotels/edit/' + ${hotel.getId()}" class="btn btn-outline-primary mx-2">
+                                <i class='fas fa-edit'></i></a>
+                            <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
+                                  th:action="'/hotels/book/' + ${hotel.getId()}" method="post">
+                                <button class="btn btn-outline-primary" type="submit">
+                                    Бронировать для <span sec:authentication="name"/></button>
+                            </form>
+                        </div>
                     </div>
                     <span class="d-block" th:text="${hotel.getDescription()}"></span>
                 </div>
