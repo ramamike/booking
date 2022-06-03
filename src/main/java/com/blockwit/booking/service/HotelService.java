@@ -1,23 +1,21 @@
 package com.blockwit.booking.service;
 
-import com.blockwit.booking.controllers.Utils;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.repository.HotelRepository;
+import com.blockwit.booking.security.SecurityService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class HotelService {
 
     private HotelRepository hotelRepository;
-
-    public HotelService(HotelRepository hotelRepository) {
-        this.hotelRepository = hotelRepository;
-    }
+    private SecurityService securityService;
 
     public Iterable<Hotel> hotels() {
         return hotelRepository.findAll();
@@ -46,7 +44,7 @@ public class HotelService {
             throws HotelNotFoundException {
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
 
-        return Utils.checkRoleFromSecurityContext("ADMIN");
+        return securityService.checkRoleFromSecurityContext("ADMIN");
 
     }
 }

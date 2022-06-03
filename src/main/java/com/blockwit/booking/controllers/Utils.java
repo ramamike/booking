@@ -15,16 +15,4 @@ public class Utils {
 			return "/";
 		return referer;
 	}
-
-	public static String getUsernameFromSecurityContext() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return authentication.getName();
-	}
-
-	public static boolean checkRoleFromSecurityContext(String role){
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return authentication.getAuthorities().stream()
-				.anyMatch(a->a.getAuthority().equals(role));
-	}
-
 }
