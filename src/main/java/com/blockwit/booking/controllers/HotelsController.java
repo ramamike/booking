@@ -110,8 +110,10 @@ public class HotelsController {
         } catch (HotelNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error",
                     "К сожалению, не удалось получить информация для пользователя");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
         }
-
 
         Hotel hotel = Hotel.builder()
                 .name(name)

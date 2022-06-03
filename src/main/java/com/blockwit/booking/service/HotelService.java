@@ -1,7 +1,9 @@
 package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.HotelRepository;
 import com.blockwit.booking.security.SecurityService;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class HotelService {
 
     private HotelRepository hotelRepository;
+    private UserService userService;
     private SecurityService securityService;
 
     public Iterable<Hotel> hotels() {
@@ -41,10 +44,10 @@ public class HotelService {
     }
 
     public boolean checkEditingPermission(long hotelId, String userName)
-            throws HotelNotFoundException {
+            throws HotelNotFoundException, UserNotFoundException {
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
-
-        return securityService.checkRoleFromSecurityContext("ADMIN");
+        Long userId= userService.getIdByUsername(userName);
+        return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
 
     }
 }
