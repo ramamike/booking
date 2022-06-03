@@ -40,4 +40,12 @@ public class HotelService {
         hotelForUpdate.setDescription(hotel.getDescription());
         return hotelRepository.save(hotelForUpdate);
     }
+
+    public boolean checkEditingPermission(long hotelId, String userName)
+            throws HotelNotFoundException {
+        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
+
+        return false;
+
+    }
 }

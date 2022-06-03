@@ -52,12 +52,12 @@ public class HotelsController {
 
         Long userId;
         try {
-            userId=userService.getIdByUsername(userName);
+            userId = userService.getIdByUsername(userName);
         } catch (UserNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error",
                     "Не удалось найти пользователя в базе данных, " +
                             " для корректного добавления отеля");
-            return new RedirectView("/", true);
+            return new RedirectView("/hotels", true);
         }
 
         Hotel hotel = Hotel.builder()
@@ -73,7 +73,7 @@ public class HotelsController {
             redirectAttributes.addFlashAttribute("message_error",
                     "Ошибка при создании отеля!");
         }
-        return new RedirectView("/", true);
+        return new RedirectView("/hotels", true);
     }
 
     @GetMapping("/edit/{hotelId}")
@@ -100,6 +100,21 @@ public class HotelsController {
                                     @PathVariable(value = "hotelId") long hotelId,
                                     @RequestParam String name, @RequestParam String description,
                                     Model model) {
+
+        String userName = Utils.getUsernameFromSecurityContext();
+
+        try {
+            if (!hotelService.checkEditingPermission(hotelId, userName)) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        userName + " не может редактировать данную запись");
+                return new RedirectView("/hotels", true);
+            }
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        }
+
+
         Hotel hotel = Hotel.builder()
                 .name(name)
                 .description(description)
@@ -112,7 +127,7 @@ public class HotelsController {
             redirectAttributes.addFlashAttribute("message_error", "К сожалению, не удалось обновить информацию об отеле!");
         }
 
-        return new RedirectView("/", true);
+        return new RedirectView("/hotels", true);
     }
 
     @PostMapping("/book/{hotelId}")

@@ -21,4 +21,8 @@ public class Utils {
 		return authentication.getName();
 	}
 
+	public static String getRoleFromSecurityContext(){
+		return null;
+	}
+
 }
