@@ -1,5 +1,6 @@
 package com.blockwit.booking.service;
 
+import com.blockwit.booking.controllers.Utils;
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.repository.HotelRepository;
@@ -45,7 +46,7 @@ public class HotelService {
             throws HotelNotFoundException {
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
 
-        return false;
+        return Utils.checkRoleFromSecurityContext("ADMIN");
 
     }
 }
