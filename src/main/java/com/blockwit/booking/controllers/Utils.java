@@ -1,5 +1,8 @@
 package com.blockwit.booking.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class Utils {
@@ -11,6 +14,11 @@ public class Utils {
 		if (referer == null || referer.isEmpty())
 			return "/";
 		return referer;
+	}
+
+	public static String getUsernameFromSecurityContext() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return authentication.getName();
 	}
 
 }

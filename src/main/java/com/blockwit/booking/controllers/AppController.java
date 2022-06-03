@@ -77,7 +77,7 @@ public class AppController {
                     newAccount.getLogin() + " создан!");
         }
 
-        return new ModelAndView("redirect:/app/accounts/create");
+        return new ModelAndView("redirect:/app/login");
     }
 
 }

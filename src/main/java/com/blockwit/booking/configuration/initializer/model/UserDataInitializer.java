@@ -29,7 +29,7 @@ public class UserDataInitializer {
         try {
             if (userRepository.getUserByUsername("admin").isEmpty()) {
                 userRepository.save(User.builder()
-                        .userName("admin")
+                        .username("admin")
                         .email("default@mail.com")
                         .roles(Set.of(roleService.getRole("ADMIN")))
                         .status(Status.ACTIVE)

@@ -2,7 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Role;
 import com.blockwit.booking.entity.User;
-import com.blockwit.booking.exceptions.RoleNotFoundException;
+import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.model.Error;
 import com.blockwit.booking.model.Status;
 import com.blockwit.booking.repository.UserRepository;
@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -34,7 +34,7 @@ public class UserService {
         String login = inLogin.trim().toLowerCase();
         String email = inEmail.trim().toLowerCase();
 
-        if (userRepository.existsByUserName(login)) {
+        if (userRepository.existsByUsername(login)) {
             log.trace("Login: " + login + " already exists!");
             return Either.left(new Error(Error.EC_LOGIN_EXISTS, Error.EM_LOGIN_EXISTS + login));
         }
@@ -46,14 +46,13 @@ public class UserService {
 
         Set<Role> rolesForAccount;
         if (serviceProvider) {
-            rolesForAccount = Set.of(roleService.getRole("CREATOR"),
-                    roleService.getRole("EDITOR"));
+            rolesForAccount = Set.of(roleService.getRole("PROVIDER"));
         } else {
             rolesForAccount = Set.of(roleService.getRole("CLIENT"));
         }
 
         return Either.right(userRepository.save(User.builder()
-                .userName(login)
+                .username(login)
                 .email(email)
                 .roles(rolesForAccount)
                 .status(Status.ACTIVE)
@@ -61,4 +60,9 @@ public class UserService {
                 .build()));
     }
 
+    public Long getIdByUsername(String username) throws UserNotFoundException{
+
+        return userRepository.getUserByUsername(username)
+                .orElseThrow(()-> new UserNotFoundException()).getId();
+    }
 }

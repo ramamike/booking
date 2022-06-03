@@ -23,8 +23,7 @@ public class RoleDataInitializer {
 
         List<String> roleNames = Arrays.asList(
                 "ADMIN",
-                "CREATOR",
-                "EDITOR",
+                "PROVIDER",
                 "CLIENT"
         );
 

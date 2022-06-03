@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="tbl_hotel")
+@Table(name="tbl_hotels")
 public class Hotel {
 
     @Id
@@ -24,6 +24,5 @@ public class Hotel {
 
     private String description;
 
-//    private
-
+    private Long ownerId;
 }

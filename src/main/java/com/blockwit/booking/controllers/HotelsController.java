@@ -5,6 +5,7 @@ import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
+import com.blockwit.booking.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/hotels")
 @AllArgsConstructor
@@ -22,6 +25,8 @@ public class HotelsController {
 
     private HotelService hotelService;
     private BookingService bookingService;
+
+    private UserService userService;
 
     @GetMapping
     public ModelAndView showHotels() {
@@ -43,9 +48,22 @@ public class HotelsController {
             @RequestParam String description,
             Model model) {
 
+        String userName = Utils.getUsernameFromSecurityContext();
+
+        Long userId;
+        try {
+            userId=userService.getIdByUsername(userName);
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Не удалось найти пользователя в базе данных, " +
+                            " для корректного добавления отеля");
+            return new RedirectView("/", true);
+        }
+
         Hotel hotel = Hotel.builder()
                 .name(name)
                 .description(description)
+                .ownerId(userId)
                 .build();
 
         if (hotelService.saveHotelResponse(hotel)) {
@@ -101,8 +119,7 @@ public class HotelsController {
     public RedirectView bookHotel(RedirectAttributes redirectAttributes,
                                   @PathVariable(value = "hotelId") long hotelId) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+        String userName = Utils.getUsernameFromSecurityContext();
 
         try {
             bookingService.bookHotel(hotelId, userName);
