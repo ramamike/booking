@@ -22,9 +22,8 @@
                     <div>
                         <strong class="text-gray-dark" th:text="${hotel.getName()}"></strong>
                         <div class="d-flex justify-content-end">
-                            <a sec:authorize="hasAnyAuthority('PROVIDER', 'ADMIN')"
-                               th:href="'/hotels/edit/' + ${hotel.getId()}" class="btn btn-outline-primary mx-2">
-                                <i class='fas fa-edit'></i></a>
+                            <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
+                                        ~{front/fragments/hotel-edit :: hotel-edit} : ~{}"></div>
                             <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
                                   th:action="'/hotels/book/' + ${hotel.getId()}" method="post">
                                 <button class="btn btn-outline-primary" type="submit">

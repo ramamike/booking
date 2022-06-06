@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<body>
+<div th:fragment="hotel-edit">
+    <a sec:authorize="hasAnyAuthority('PROVIDER', 'ADMIN')"
+       th:href="'/hotels/edit/' + ${hotel.getId()}" class="btn btn-outline-primary mx-2">
+        <i class='fas fa-edit'></i></a>
+</div>
+</body>
+</html>

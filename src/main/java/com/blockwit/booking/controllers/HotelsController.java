@@ -27,10 +27,25 @@ public class HotelsController {
     private SecurityService securityService;
 
     @GetMapping
-    public ModelAndView showHotels() {
+    public ModelAndView showHotels(RedirectAttributes redirectAttributes) {
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        Long usedId= null;
+        try {
+            usedId = userService.getIdByUsername(userName);
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Не удалось найти пользователя в базе данных, " +
+                            " для корректного отображения данных");
+        }
+
+        boolean isAmin=securityService.checkRoleFromSecurityContext("ADMIN");
+
         ModelAndView mav = new ModelAndView();
         mav.setViewName("front/hotels");
         mav.addObject("hotels", hotelService.hotels());
+        mav.addObject("userId", usedId );
+        mav.addObject("isAdmin", isAmin);
         return mav;
     }
 
