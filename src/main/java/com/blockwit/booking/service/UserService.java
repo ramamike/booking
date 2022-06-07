@@ -62,9 +62,7 @@ public class UserService {
                 .build()));
     }
 
-    public Long getIdByUsername(String username) throws UserNotFoundException{
-
-        return userRepository.getUserByUsername(username)
-                .orElseThrow(()-> new UserNotFoundException()).getId();
+    public Optional<User> getUserByUsername(String userName) {
+        return userRepository.getUserByUsername(userName);
     }
 }

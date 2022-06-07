@@ -2,6 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Booking;
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.BookingRepository;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,11 +33,12 @@ public class BookingService {
         Hotel hotelForBook = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new HotelNotFoundException());
 
-        Long userId = userService.getIdByUsername(userName);
+        User user=userService.getUserByUsername(userName)
+                .orElseThrow(()->new UserNotFoundException());
 
         Booking booking = Booking.builder()
                 .hotelId(hotelId)
-                .userId(userId)
+                .userId(user.getId())
                 .build();
         bookingRepository.save(booking);
 

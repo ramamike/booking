@@ -45,7 +45,8 @@ public class HotelService {
     public boolean checkEditingPermission(long hotelId, String userName)
             throws HotelNotFoundException, UserNotFoundException {
         Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
-        Long userId= userService.getIdByUsername(userName);
+        Long userId= userService.getUserByUsername(userName)
+                .orElseThrow(()-> new UserNotFoundException()).getId();
         return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
 
     }

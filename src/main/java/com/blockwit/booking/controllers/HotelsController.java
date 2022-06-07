@@ -1,6 +1,7 @@
 package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
@@ -8,6 +9,7 @@ import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
 import com.blockwit.booking.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/hotels")
 @AllArgsConstructor
+@Slf4j
 public class HotelsController {
 
     private HotelService hotelService;
@@ -28,23 +33,28 @@ public class HotelsController {
 
     @GetMapping
     public ModelAndView showHotels(RedirectAttributes redirectAttributes) {
+
+        ModelAndView mav = new ModelAndView();
+
         String userName = securityService.getUsernameFromSecurityContext();
 
-        Long usedId= null;
-        try {
-            usedId = userService.getIdByUsername(userName);
-        } catch (UserNotFoundException e) {
+        Optional<User> userOptional = userService.getUserByUsername(userName);
+
+        if (userName.equals("anonymousUser")) {
+            log.info("anonymousUser");
+        } else if (userOptional.isPresent()) {
+            mav.addObject("userId", userOptional.get().getId());
+        } else if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
                     "Не удалось найти пользователя в базе данных, " +
                             " для корректного отображения данных");
+            return new ModelAndView("redirect:/");
         }
 
-        boolean isAdmin=securityService.checkRoleFromSecurityContext("ADMIN");
+        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 
-        ModelAndView mav = new ModelAndView();
         mav.setViewName("front/hotels");
         mav.addObject("hotels", hotelService.hotels());
-        mav.addObject("userId", usedId );
         mav.addObject("isAdmin", isAdmin);
         return mav;
     }
@@ -63,10 +73,9 @@ public class HotelsController {
 
         String userName = securityService.getUsernameFromSecurityContext();
 
-        Long userId;
-        try {
-            userId = userService.getIdByUsername(userName);
-        } catch (UserNotFoundException e) {
+        Optional<User> userOptional = userService.getUserByUsername(userName);
+
+        if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
                     "Не удалось найти пользователя в базе данных, " +
                             " для корректного добавления отеля");
@@ -76,7 +85,7 @@ public class HotelsController {
         Hotel hotel = Hotel.builder()
                 .name(name)
                 .description(description)
-                .ownerId(userId)
+                .ownerId(userOptional.get().getId())
                 .build();
 
         if (hotelService.saveHotelResponse(hotel)) {
