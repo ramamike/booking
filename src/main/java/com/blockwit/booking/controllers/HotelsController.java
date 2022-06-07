@@ -95,7 +95,7 @@ public class HotelsController {
 
         Hotel hotel = null;
         try {
-            hotel = hotelService.showDetail(hotelId);
+            hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
             ModelAndView mav = new ModelAndView();
             mav.setViewName("front/hotel-edit");
             mav.addObject("hotel", hotel);

@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @AllArgsConstructor
@@ -29,8 +31,8 @@ public class HotelService {
         return result != null;
     }
 
-    public Hotel showDetail(Long hotelId) throws HotelNotFoundException {
-        return hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
+    public Optional<Hotel> showDetail(Long hotelId) throws HotelNotFoundException {
+        return hotelRepository.findById(hotelId);
     }
 
     public Hotel hotelUpdate(long hotelId, Hotel hotel) throws HotelNotFoundException {

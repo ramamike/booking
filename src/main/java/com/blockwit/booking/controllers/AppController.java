@@ -50,7 +50,6 @@ public class AppController {
 
     @PostMapping("app/accounts/create")
     public ModelAndView createAccountPOST(
-            HttpServletRequest request,
             RedirectAttributes redirectAttributes,
             @ModelAttribute("newAccount") @Valid NewAccount newAccount,
             BindingResult bindingResult
