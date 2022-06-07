@@ -176,4 +176,7 @@ public class HotelsController {
         return new RedirectView("/", true);
     }
 
+
+//    @GetMapping()
+
 }
