@@ -39,13 +39,13 @@ public class HotelsController {
                             " для корректного отображения данных");
         }
 
-        boolean isAmin=securityService.checkRoleFromSecurityContext("ADMIN");
+        boolean isAdmin=securityService.checkRoleFromSecurityContext("ADMIN");
 
         ModelAndView mav = new ModelAndView();
         mav.setViewName("front/hotels");
         mav.addObject("hotels", hotelService.hotels());
         mav.addObject("userId", usedId );
-        mav.addObject("isAdmin", isAmin);
+        mav.addObject("isAdmin", isAdmin);
         return mav;
     }
 

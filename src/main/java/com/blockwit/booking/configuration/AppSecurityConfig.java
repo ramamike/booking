@@ -50,7 +50,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/hotels").authenticated()
+                .antMatchers("/hotels").permitAll()
                 .antMatchers("/hotels/book/*").hasAnyAuthority("CLIENT", "ADMIN")
                 .antMatchers("/hotels/add").hasAnyAuthority("PROVIDER", "ADMIN")
                 .antMatchers("/hotels/edit/*").hasAnyAuthority("PROVIDER", "ADMIN")
