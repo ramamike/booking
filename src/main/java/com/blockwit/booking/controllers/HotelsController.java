@@ -177,6 +177,8 @@ public class HotelsController {
     }
 
 
-//    @GetMapping()
-
+    @GetMapping("/booked")
+    public String bookedHotels(){
+        return "front/hotels-booked";
+    }
 }
