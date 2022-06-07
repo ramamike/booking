@@ -14,10 +14,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="tbl_booking")
+@Table(name="booking")
 public class Booking {
     @Id
-    @Column(name = "booking_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -30,10 +30,7 @@ public class HotelService {
     }
 
     public Hotel showDetail(Long hotelId) throws HotelNotFoundException {
-
-        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
-
-        return hotel;
+        return hotelRepository.findById(hotelId).orElseThrow(() -> new HotelNotFoundException());
     }
 
     public Hotel hotelUpdate(long hotelId, Hotel hotel) throws HotelNotFoundException {

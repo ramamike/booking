@@ -63,11 +63,18 @@ public class AppController {
                     bindingResult.getModel(), HttpStatus.BAD_REQUEST);
 
         log.info("Create account");
-        Either<Error, User> accountEither = userService.createAccount(
-                newAccount.getLogin(),
-                newAccount.getEmail(),
-                newAccount.getPassword(),
-                newAccount.isServiceProvider());
+        Either<Error, User> accountEither = null;
+        try {
+            accountEither = userService.createAccount(
+                    newAccount.getLogin(),
+                    newAccount.getEmail(),
+                    newAccount.getPassword(),
+                    newAccount.isServiceProvider());
+        } catch (RoleNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "ошибка определния роли в базе данных");
+            return new ModelAndView("redirect:/app/accounts/create");
+        }
 
         if (accountEither.isLeft()) {
             redirectAttributes.addFlashAttribute("message_error",

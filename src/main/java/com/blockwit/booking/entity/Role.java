@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "tbl_roles")
+@Table(name = "roles")
 public class Role {
     @Id
     @Column(name = "role_id")

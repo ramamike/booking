@@ -16,8 +16,8 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     @Transactional
-    public Role getRole(String role) {
-        return roleRepository.findByRole(role).get();
+    public Optional<Role> getRole(String role) {
+        return roleRepository.findByRole(role);
     }
 
 }

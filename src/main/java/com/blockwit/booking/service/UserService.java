@@ -2,6 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Role;
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.RoleNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.model.Error;
 import com.blockwit.booking.model.Status;
@@ -30,7 +31,8 @@ public class UserService {
     public Either<Error, User> createAccount(String inLogin,
                                              String inEmail,
                                              String password,
-                                             boolean serviceProvider) {
+                                             boolean serviceProvider) throws RoleNotFoundException {
+
         String login = inLogin.trim().toLowerCase();
         String email = inEmail.trim().toLowerCase();
 
@@ -46,9 +48,9 @@ public class UserService {
 
         Set<Role> rolesForAccount;
         if (serviceProvider) {
-            rolesForAccount = Set.of(roleService.getRole("PROVIDER"));
+            rolesForAccount = Set.of(roleService.getRole("PROVIDER").orElseThrow(()-> new RoleNotFoundException()));
         } else {
-            rolesForAccount = Set.of(roleService.getRole("CLIENT"));
+            rolesForAccount = Set.of(roleService.getRole("CLIENT").orElseThrow(()-> new RoleNotFoundException()));
         }
 
         return Either.right(userRepository.save(User.builder()

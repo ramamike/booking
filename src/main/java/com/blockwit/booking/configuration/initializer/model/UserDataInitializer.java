@@ -1,6 +1,7 @@
 package com.blockwit.booking.configuration.initializer.model;
 
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.RoleNotFoundException;
 import com.blockwit.booking.model.Status;
 import com.blockwit.booking.repository.UserRepository;
 import com.blockwit.booking.service.RoleService;
@@ -31,7 +32,7 @@ public class UserDataInitializer {
                 userRepository.save(User.builder()
                         .username("admin")
                         .email("default@mail.com")
-                        .roles(Set.of(roleService.getRole("ADMIN")))
+                        .roles(Set.of(roleService.getRole("ADMIN").orElseThrow(()-> new RoleNotFoundException())))
                         .status(Status.ACTIVE)
                         .hashPassword(passwordEncoder.encode("password"))
                         .build());
