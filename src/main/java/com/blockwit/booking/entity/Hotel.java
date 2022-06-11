@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -27,12 +25,4 @@ public class Hotel {
     private String description;
 
     private Long ownerId;
-
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "hotel_booking",
-//            joinColumns = @JoinColumn(name = "hotel_id"),
-//            inverseJoinColumns = @JoinColumn(name = "booking_id")
-//    )
-//    private List<Booking> bookings = new ArrayList<>();
 }
