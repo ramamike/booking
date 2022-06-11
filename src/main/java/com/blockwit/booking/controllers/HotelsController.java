@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -77,7 +78,7 @@ public class HotelsController {
 
         if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
-                    "Не удалось найти пользователя в базе данных, " +
+                    "Не удалось определить пользователя, " +
                             " для корректного добавления отеля");
             return new RedirectView("/hotels", true);
         }
@@ -173,12 +174,36 @@ public class HotelsController {
         redirectAttributes.addFlashAttribute("message_success",
                 "Отель забранирован!");
 
-        return new RedirectView("/", true);
+        return new RedirectView("/hotels", true);
     }
 
 
     @GetMapping("/booked")
-    public String bookedHotels(){
-        return "front/hotels-booked";
+    public ModelAndView bookedHotels(RedirectAttributes redirectAttributes) {
+
+        ModelAndView mav = new ModelAndView();
+
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        Optional<User> userOptional = userService.getUserByUsername(userName);
+
+        Iterable<Hotel> bookedHotels = null;
+        if (userOptional.isPresent()) {
+            try {
+                bookedHotels = hotelService.bookedHotels(userOptional.get().getId());
+            } catch (UserNotFoundException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "Не удалось определить зарезервированные отели");
+                return new ModelAndView("redirect:/");
+            }
+        } else if (userOptional.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Не удалось определить пользователя, " +
+                            " для корректного отображения данных");
+            return new ModelAndView("redirect:/");
+        }
+        mav.setViewName("front/hotels-booked");
+        mav.addObject("bookedHotels", bookedHotels);
+        return mav;
     }
 }

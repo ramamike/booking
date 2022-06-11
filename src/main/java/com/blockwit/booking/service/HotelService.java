@@ -48,6 +48,10 @@ public class HotelService {
         Long userId= userService.getUserByUsername(userName)
                 .orElseThrow(()-> new UserNotFoundException()).getId();
         return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
-
     }
+
+    public Iterable<Hotel> bookedHotels(Long userId) throws  UserNotFoundException{
+        return hotelRepository.getBookedHotel(userId);
+    }
+
 }

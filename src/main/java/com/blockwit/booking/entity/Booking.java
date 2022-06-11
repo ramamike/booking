@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="booking")
+@Table(name="bookings")
 public class Booking {
     @Id
     @Column(name = "id")
@@ -24,4 +24,12 @@ public class Booking {
     private Long hotelId;
 
     private Long userId;
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "hotel_booking",
+//            joinColumns = @JoinColumn(name = "booking_id"),
+//            inverseJoinColumns = @JoinColumn(name = "hotel_id")
+//    )
+//    private List<Hotel> hotels = new ArrayList<>();
 }
