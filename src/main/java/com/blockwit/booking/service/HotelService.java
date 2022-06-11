@@ -2,6 +2,7 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.BookingNotFoundException;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.HotelRepository;
@@ -50,7 +51,8 @@ public class HotelService {
         return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
     }
 
-    public Iterable<Hotel> bookedHotels(Long userId) throws  UserNotFoundException{
+    public Iterable<Hotel> bookedHotels(Long userId)
+            throws  UserNotFoundException, HotelNotFoundException, BookingNotFoundException {
         return hotelRepository.getBookedHotel(userId);
     }
 

@@ -12,11 +12,10 @@ public class SecurityService {
         return authentication.getName();
     }
 
-    public boolean checkRoleFromSecurityContext(String role){
+    public boolean checkRoleFromSecurityContext(String role) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities().stream()
-                .anyMatch(a->a.getAuthority().equals(role));
+                .anyMatch(a -> a.getAuthority().equals(role));
     }
-
 
 }

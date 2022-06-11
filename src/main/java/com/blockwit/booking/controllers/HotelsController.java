@@ -2,6 +2,7 @@ package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.entity.User;
+import com.blockwit.booking.exceptions.BookingNotFoundException;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
@@ -17,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -47,8 +47,8 @@ public class HotelsController {
             mav.addObject("userId", userOptional.get().getId());
         } else if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
-                    "Не удалось найти пользователя в базе данных, " +
-                            " для корректного отображения данных");
+                    "Проблема на стороне сервера, " +
+                            " данные могут отображаться не корректно");
             return new ModelAndView("redirect:/");
         }
 
@@ -193,9 +193,17 @@ public class HotelsController {
                 bookedHotels = hotelService.bookedHotels(userOptional.get().getId());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
-                        "Не удалось определить зарезервированные отели");
+                        "Не удалось определить пользовтеля," +
+                                " попробуйте еще раз");
                 return new ModelAndView("redirect:/");
+            } catch (HotelNotFoundException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "Не удалось определить отели, попробуйте еще раз");
+            } catch (BookingNotFoundException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "Не удалось определить забронированные отели, попробуйте еще раз");
             }
+
         } else if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
                     "Не удалось определить пользователя, " +
