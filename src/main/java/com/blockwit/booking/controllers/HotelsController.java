@@ -191,14 +191,6 @@ public class HotelsController {
         if (userOptional.isPresent()) {
             try {
                 bookedHotels = hotelService.bookedHotels(userOptional.get().getId());
-            } catch (UserNotFoundException e) {
-                redirectAttributes.addFlashAttribute("message_error",
-                        "Не удалось определить пользовтеля," +
-                                " попробуйте еще раз");
-                return new ModelAndView("redirect:/");
-            } catch (HotelNotFoundException e) {
-                redirectAttributes.addFlashAttribute("message_error",
-                        "Не удалось определить отели, попробуйте еще раз");
             } catch (BookingNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "Не удалось определить забронированные отели, попробуйте еще раз");
@@ -208,7 +200,7 @@ public class HotelsController {
             redirectAttributes.addFlashAttribute("message_error",
                     "Не удалось определить пользователя, " +
                             " для корректного отображения данных");
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/hotels");
         }
         mav.setViewName("front/hotels-booked");
         mav.addObject("bookedHotels", bookedHotels);

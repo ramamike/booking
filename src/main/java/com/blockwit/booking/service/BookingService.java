@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -29,7 +31,6 @@ public class BookingService {
     public Hotel bookHotel(long hotelId, String userName)
             throws HotelNotFoundException, UserNotFoundException{
 
-        //check if hotel is existed
         Hotel hotelForBook = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new HotelNotFoundException());
 
@@ -39,6 +40,7 @@ public class BookingService {
         Booking booking = Booking.builder()
                 .hotelId(hotelId)
                 .userId(user.getId())
+                .hotels(List.of(hotelForBook))
                 .build();
         bookingRepository.save(booking);
 

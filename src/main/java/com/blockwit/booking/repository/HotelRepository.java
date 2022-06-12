@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HotelRepository extends CrudRepository<Hotel, Long> {
 
-    @Query(
-            value = "SELECT * FROM hotels inner join bookings on hotels.id=bookings.hotel_id \n" +
-                    "where bookings.user_id=?1",
-            nativeQuery = true
-    )
-    Iterable<Hotel> getBookedHotel(Long userId);
+    @Query("SELECT h FROM Hotel h join h.bookings b where b.userId=?1")
+    Iterable<Hotel> getBookedHotels(Long userId);
 }
