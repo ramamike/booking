@@ -14,23 +14,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="bookings")
-public class Booking {
+@Table(name="rooms")
+public class Room {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long roomId;
+    private String name;
 
-    private Long userId;
+    private String description;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "rooms_bookings",
-            joinColumns = @JoinColumn(name = "booking_id"),
-            inverseJoinColumns = @JoinColumn(name = "room_id")
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "booking_id")
     )
-    private List<Room> rooms = new ArrayList<>();
-
+    private List<Booking> bookings = new ArrayList<>();
 }
