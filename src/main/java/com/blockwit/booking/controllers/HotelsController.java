@@ -47,8 +47,7 @@ public class HotelsController {
             mav.addObject("userId", userOptional.get().getId());
         } else if (userOptional.isEmpty()) {
             redirectAttributes.addFlashAttribute("message_error",
-                    "Проблема на стороне сервера, " +
-                            " данные могут отображаться не корректно");
+                    "Данные могут отображаться не корректно");
             return new ModelAndView("redirect:/");
         }
 
@@ -155,55 +154,4 @@ public class HotelsController {
         return new RedirectView("/hotels", true);
     }
 
-    @PostMapping("/book/{hotelId}")
-    public RedirectView bookHotel(RedirectAttributes redirectAttributes,
-                                  @PathVariable(value = "hotelId") long hotelId) {
-
-        String userName = securityService.getUsernameFromSecurityContext();
-
-        try {
-            bookingService.bookHotel(hotelId, userName);
-        } catch (HotelNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
-            return new RedirectView("/", true);
-        } catch (UserNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message_error", "К сожалению пользователь не найден!");
-            return new RedirectView("/", true);
-        }
-
-        redirectAttributes.addFlashAttribute("message_success",
-                "Отель забранирован!");
-
-        return new RedirectView("/hotels", true);
-    }
-
-
-//    @GetMapping("/booked")
-//    public ModelAndView bookedHotels(RedirectAttributes redirectAttributes) {
-//
-//        ModelAndView mav = new ModelAndView();
-//
-//        String userName = securityService.getUsernameFromSecurityContext();
-//
-//        Optional<User> userOptional = userService.getUserByUsername(userName);
-//
-//        Iterable<Hotel> bookedHotels = null;
-//        if (userOptional.isPresent()) {
-//            try {
-//                bookedHotels = hotelService.bookedHotels(userOptional.get().getId());
-//            } catch (BookingNotFoundException e) {
-//                redirectAttributes.addFlashAttribute("message_error",
-//                        "Не удалось определить забронированные отели, попробуйте еще раз");
-//            }
-//
-//        } else if (userOptional.isEmpty()) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "Не удалось определить пользователя, " +
-//                            " для корректного отображения данных");
-//            return new ModelAndView("redirect:/hotels");
-//        }
-//        mav.setViewName("front/hotels-booked");
-//        mav.addObject("bookedHotels", bookedHotels);
-//        return mav;
-//    }
 }

@@ -22,13 +22,15 @@ import java.util.Optional;
 public class HotelService {
 
     private HotelRepository hotelRepository;
-
-    private RoomRepository roomRepository;
     private UserService userService;
     private SecurityService securityService;
 
     public Iterable<Hotel> hotels() {
         return hotelRepository.findAll();
+    }
+
+    public Optional<Hotel> getHotelById(Long id) {
+        return hotelRepository.findById(id);
     }
 
     public boolean saveHotelResponse(Hotel hotel) {
@@ -54,9 +56,4 @@ public class HotelService {
                 .orElseThrow(()-> new UserNotFoundException()).getId();
         return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
     }
-
-    public Optional<Room> getBookedRooms(Long userId) {
-        return roomRepository.getBookedRooms(userId);
-    }
-
 }
