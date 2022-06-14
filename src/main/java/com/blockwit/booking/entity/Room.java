@@ -26,6 +26,13 @@ public class Room {
 
     private String description;
 
+    @ManyToOne
+    @JoinColumn (
+            name = "hotel_id",
+            nullable = false
+    )
+    private Hotel hotel;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "rooms_bookings",

@@ -1,10 +1,13 @@
 package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.Room;
 import com.blockwit.booking.exceptions.BookingNotFoundException;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.HotelRepository;
+import com.blockwit.booking.repository.RoomRepository;
 import com.blockwit.booking.security.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,8 @@ import java.util.Optional;
 public class HotelService {
 
     private HotelRepository hotelRepository;
+
+    private RoomRepository roomRepository;
     private UserService userService;
     private SecurityService securityService;
 
@@ -50,8 +55,8 @@ public class HotelService {
         return securityService.checkRoleFromSecurityContext("ADMIN") || hotel.getOwnerId().equals(userId);
     }
 
-    public Iterable<Hotel> bookedHotels(Long userId) throws BookingNotFoundException {
-        return hotelRepository.getBookedHotels(userId);
+    public Optional<Room> getBookedRooms(Long userId) {
+        return roomRepository.getBookedRooms(userId);
     }
 
 }

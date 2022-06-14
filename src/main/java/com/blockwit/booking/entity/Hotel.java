@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,11 +30,10 @@ public class Hotel {
 
     private Long ownerId;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "hotel_booking",
-            joinColumns = @JoinColumn(name = "hotel_id"),
-            inverseJoinColumns = @JoinColumn(name = "booking_id")
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "hotel"
     )
-    private List<Booking> bookings = new ArrayList<>();
+    private Set<Room> rooms = new HashSet<>();
 }
