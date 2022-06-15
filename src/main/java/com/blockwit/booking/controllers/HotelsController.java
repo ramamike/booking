@@ -98,7 +98,7 @@ public class HotelsController {
         return new RedirectView("/hotels", true);
     }
 
-    @GetMapping("/edit/{hotelId}")
+    @GetMapping("/{hotelId}/edit")
     public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
                                      @PathVariable(value = "hotelId") long hotelId, Model model) {
 
@@ -117,7 +117,7 @@ public class HotelsController {
         return new ModelAndView("redirect:/");
     }
 
-    @PostMapping("/edit/{hotelId}")
+    @PostMapping("/{hotelId}/edit")
     public RedirectView hotelUpdate(RedirectAttributes redirectAttributes,
                                     @PathVariable(value = "hotelId") long hotelId,
                                     @RequestParam String name, @RequestParam String description,
