@@ -16,7 +16,7 @@ public class RoomService {
 
     private RoomRepository roomRepository;
 
-    public Iterable<Room> hotels() {
+    public Iterable<Room> rooms() {
         return roomRepository.findAll();
     }
 

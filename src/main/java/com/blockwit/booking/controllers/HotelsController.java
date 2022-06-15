@@ -98,6 +98,26 @@ public class HotelsController {
         return new RedirectView("/hotels", true);
     }
 
+    @GetMapping("/{hotelId}")
+    public ModelAndView showHotel(RedirectAttributes redirectAttributes,
+                                  @PathVariable(value = "hotelId") long hotelId, Model model) {
+
+        Hotel hotel = null;
+        try {
+            hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
+            ModelAndView mav = new ModelAndView();
+            mav.addObject(hotel);
+            mav.setViewName("front/hotel-general");
+            return mav;
+
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению отель не найден!");
+        }
+
+        return new ModelAndView("redirect:/hotels");
+    }
+
     @GetMapping("/{hotelId}/edit")
     public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
                                      @PathVariable(value = "hotelId") long hotelId, Model model) {
@@ -111,7 +131,8 @@ public class HotelsController {
             mav.addObject("hotelId", String.valueOf(hotelId));
             return mav;
         } catch (HotelNotFoundException e) {
-            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению отель не найден!");
         }
 
         return new ModelAndView("redirect:/");
