@@ -4,8 +4,8 @@ import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.entity.Room;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
-import com.blockwit.booking.repository.RoomRepository;
 import com.blockwit.booking.security.SecurityService;
 import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
@@ -35,33 +35,6 @@ public class RoomsController {
     private BookingService bookingService;
     private UserService userService;
     private SecurityService securityService;
-
-//    @GetMapping
-//    public ModelAndView showHotels(RedirectAttributes redirectAttributes) {
-//
-//        ModelAndView mav = new ModelAndView();
-//
-//        String userName = securityService.getUsernameFromSecurityContext();
-//
-//        Optional<User> userOptional = userService.getUserByUsername(userName);
-//
-//        if (userName.equals("anonymousUser")) {
-//            log.info("anonymousUser");
-//        } else if (userOptional.isPresent()) {
-//            mav.addObject("userId", userOptional.get().getId());
-//        } else if (userOptional.isEmpty()) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "Данные могут отображаться не корректно");
-//            return new ModelAndView("redirect:/");
-//        }
-//
-//        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
-//
-//        mav.setViewName("front/hotels");
-//        mav.addObject("hotels", hotelService.hotels());
-//        mav.addObject("isAdmin", isAdmin);
-//        return mav;
-//    }
 
     @GetMapping("/{hotelId}/rooms/add")
     public ModelAndView hotelAdd(
@@ -111,7 +84,7 @@ public class RoomsController {
                             " для корректного добавления комнаты");
             return new RedirectView("/hotels", true);
         }
-                Room room = Room.builder()
+        Room room = Room.builder()
                 .name(name)
                 .description(description)
                 .hotel(hotelOptional.get())
@@ -124,64 +97,69 @@ public class RoomsController {
             redirectAttributes.addFlashAttribute("message_error",
                     "Ошибка при создании комнаты!");
         }
-        return new RedirectView("/hotels", true);
+        return new RedirectView("/hotels/{hotelId}", true);
     }
-//
-//    @GetMapping("/edit/{hotelId}")
-//    public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
-//                                     @PathVariable(value = "hotelId") long hotelId, Model model) {
-//
-//        Hotel hotel = null;
-//        try {
-//            hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
-//            ModelAndView mav = new ModelAndView();
-//            mav.setViewName("front/hotel-edit");
-//            mav.addObject("hotel", hotel);
-//            mav.addObject("hotelId", String.valueOf(hotelId));
-//            return mav;
-//        } catch (HotelNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
-//        }
-//
-//        return new ModelAndView("redirect:/");
-//    }
-//
-//    @PostMapping("/edit/{hotelId}")
-//    public RedirectView hotelUpdate(RedirectAttributes redirectAttributes,
-//                                    @PathVariable(value = "hotelId") long hotelId,
-//                                    @RequestParam String name, @RequestParam String description,
-//                                    Model model) {
-//
-//        String userName = securityService.getUsernameFromSecurityContext();
-//
-//        try {
-//            if (!hotelService.checkEditingPermission(hotelId, userName)) {
-//                redirectAttributes.addFlashAttribute("message_error",
-//                        userName + " не может редактировать данную запись");
-//                return new RedirectView("/hotels", true);
-//            }
-//        } catch (HotelNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "К сожалению, не удалось получить информация для пользователя");
-//        } catch (UserNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "К сожалению, не удалось получить информация для пользователя");
-//        }
-//
-//        Hotel hotel = Hotel.builder()
-//                .name(name)
-//                .description(description)
-//                .build();
-//
-//        try {
-//            hotelService.hotelUpdate(hotelId, hotel);
-//            redirectAttributes.addFlashAttribute("message_success", "Информацию об отеле обновили успешно!");
-//        } catch (HotelNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error", "К сожалению, не удалось обновить информацию об отеле!");
-//        }
-//
-//        return new RedirectView("/hotels", true);
-//    }
+
+    @GetMapping("/{hotelId}/rooms/{roomId}/edit")
+    public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
+                                     @PathVariable(value = "hotelId") long hotelId,
+                                     @PathVariable(value = "roomId") long roomId, Model model) {
+
+        Room room = null;
+        try {
+            room = roomService.showDetail(roomId).orElseThrow(() -> new RoomNotFoundException());
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("hotelId", String.valueOf(hotelId));
+            mav.setViewName("front/room-edit");
+            mav.addObject("room", room);
+            mav.addObject("roomId", String.valueOf(roomId));
+            return mav;
+        } catch (RoomNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error", "К сожалению комната не найдена!");
+        }
+
+        return new ModelAndView("redirect:/hotels/{hotelId}");
+    }
+
+    @PostMapping("/{hotelId}/rooms/{roomId}/edit")
+    public RedirectView roomUpdate(RedirectAttributes redirectAttributes,
+                                    @PathVariable(value = "hotelId") long hotelId,
+                                    @PathVariable(value = "roomId") long roomId,
+                                    @RequestParam String name, @RequestParam String description,
+                                    Model model) {
+
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        try {
+            if (!hotelService.checkEditingPermission(hotelId, userName)) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        userName + " не может редактировать данную запись");
+                return new RedirectView("/hotels/{hotelId}", true);
+            }
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        }
+
+        Room room = Room.builder()
+                .name(name)
+                .description(description)
+                .build();
+
+        try {
+            roomService.roomUpdate(roomId, room);
+            redirectAttributes.addFlashAttribute("message_success",
+                    "Информацию о комнате обновили успешно!");
+        } catch (RoomNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось обновить информацию о комнате!");
+        }
+
+        return new RedirectView("/hotels/{hotelId}", true);
+    }
 //
 //    @PostMapping("/book/{hotelId}")
 //    public RedirectView bookHotel(RedirectAttributes redirectAttributes,

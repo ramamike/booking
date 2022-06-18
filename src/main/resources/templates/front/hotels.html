@@ -10,7 +10,7 @@
         <!--/*@thymesVar id="hotels" type="java.util.List<com.blockwit.booking.entity.Hotel>"*/-->
         <th:block th:each="hotel : ${hotels}">
             <!--/*@thymesVar id="hotel" type="com.blockwit.booking.entity.Hotel"*/-->
-            <div class="d-flex text-muted pt-3">
+            <div class="d-flex text-muted ptg-3">
                 <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
                      xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
                      preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
@@ -20,17 +20,17 @@
 
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
                     <div>
-                        <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}" class="text-gray-dark" th:text="${hotel.getName()}"></a>
+                        <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}"
+                           class="text-gray-dark" th:text="${hotel.getName()}"></a>
+                        <span class="d-block" th:text="${hotel.getDescription()}"></span>
                         <div class="d-flex justify-content-end">
                             <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
                                         ~{front/fragments/itemFront ::
-                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
-                                                        itemIcon= 'fas fa-edit')}:
-                                                    ~{}">
+                                            itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
+                                                itemIcon= 'fas fa-edit')}: ~{}">
                             </div>
                         </div>
                     </div>
-                    <span class="d-block" th:text="${hotel.getDescription()}"></span>
                 </div>
             </div>
         </th:block>

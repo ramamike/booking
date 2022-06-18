@@ -5,8 +5,15 @@
 <div layout:fragment="content">
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h6 class="border-bottom pb-2 mb-2">Отель: <span th:text="${hotel.getName()}"/></h6>
-
+        <div class="border-bottom pb-2 mb-2">
+            <h6 class="pb-2 mb-2">Отель: <span th:text="${hotel.getName()}"/></h6>
+            <span class="pb-2 d-block" th:text="${hotel.getDescription()}"></span>
+            <div sec:authorize="hasAnyAuthority('ADMIN', 'PROVIDER')"
+                 th:replace="front/fragments/itemFront ::
+                itemFrontNameIcon(targetName = 'Добавить комнату',
+                    targetUrl = ${hotel.getId}+'/rooms/add',
+                    itemIcon = 'fa fa-plus')"></div>
+        </div>
         <th:block th:each="room : ${hotel.rooms}">
             <div class="d-flex text-muted pt-3">
                 <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
@@ -19,12 +26,13 @@
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
                     <div>
                         <strong class="text-gray-dark" th:text="${room.getName()}"></strong>
+                        <span class="d-block" th:text="${room.getDescription()}"></span>
                         <div class="d-flex justify-content-end">
                             <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
                                         ~{front/fragments/itemFront ::
-                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
-                                                        itemIcon= 'fas fa-edit')}:
-                                                    ~{}">
+                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()}
+                                            +'/rooms/'+ ${room.getId()} + '/edit',
+                                        itemIcon= 'fas fa-edit')}: ~{}">
                             </div>
                             <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
                                   th:action="'/hotels/book/' + ${hotel.getId()}" method="post">
@@ -33,7 +41,6 @@
                             </form>
                         </div>
                     </div>
-                    <span class="d-block" th:text="${hotel.getDescription()}"></span>
                 </div>
             </div>
         </th:block>

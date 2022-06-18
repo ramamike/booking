@@ -14,5 +14,12 @@
     </a>
 </div>
 
+<div  th:fragment="itemFrontNameIcon (targetName, targetUrl, itemIcon)">
+    <a th:href="${targetUrl}">
+        <i th:class="${itemIcon}"></i>
+        <span th:text="${targetName}"></span>
+    </a>
+</div>
 </body>
+
 </html>
