@@ -20,7 +20,7 @@
 
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
                     <div>
-                        <a th:href="'/hotels/'+${hotel.getId()}" class="text-gray-dark" th:text="${hotel.getName()}"></a>
+                        <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}" class="text-gray-dark" th:text="${hotel.getName()}"></a>
                         <div class="d-flex justify-content-end">
                             <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
                                         ~{front/fragments/itemFront ::

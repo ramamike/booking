@@ -102,11 +102,15 @@ public class HotelsController {
     public ModelAndView showHotel(RedirectAttributes redirectAttributes,
                                   @PathVariable(value = "hotelId") long hotelId, Model model) {
 
+
+        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
+
         Hotel hotel = null;
         try {
             hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
             ModelAndView mav = new ModelAndView();
             mav.addObject(hotel);
+            mav.addObject("isAdmin", isAdmin);
             mav.setViewName("front/hotel-general");
             return mav;
 
