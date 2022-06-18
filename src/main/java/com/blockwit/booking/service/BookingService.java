@@ -23,7 +23,6 @@ import java.util.List;
 public class BookingService {
 
     private BookingRepository bookingRepository;
-    private HotelRepository hotelRepository;
     private RoomRepository roomRepository;
 
     private UserService userService;
@@ -40,7 +39,7 @@ public class BookingService {
         Booking booking = Booking.builder()
                 .userId(user.getId())
                 .roomId(room.getId())
-//                .rooms(List.of(room))
+                .rooms(List.of(room))
                 .build();
         return bookingRepository.save(booking)!=null;
     }

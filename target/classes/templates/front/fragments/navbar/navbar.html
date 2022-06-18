@@ -17,7 +17,7 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li th:replace="front/fragments/navbar/item :: item(targetName = 'отели', targetUrl = '/hotels')"></li>
                 <li sec:authorize="isAuthenticated()"
-                    th:replace="front/fragments/navbar/item :: item(targetName = 'Забронированные', targetUrl = '/hotels/booked')"></li>
+                    th:replace="front/fragments/navbar/item :: item(targetName = 'забронировано', targetUrl = '/hotels/booked')"></li>
                 <li sec:authorize="hasAnyAuthority('ADMIN', 'PROVIDER')"
                     th:replace="front/fragments/navbar/item :: item(targetName = 'добавить', targetUrl = 'hotels/add')"></li>
             </ul>

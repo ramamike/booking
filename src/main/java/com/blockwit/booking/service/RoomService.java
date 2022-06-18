@@ -37,7 +37,7 @@ public class RoomService {
         return roomRepository.save(roomForUpdate);
     }
 
-    public Optional<Room> getBookedRooms(Long userId) {
+    public Iterable<Room> getBookedRooms(Long userId) throws RoomNotFoundException {
         return roomRepository.getBookedRooms(userId);
     }
 

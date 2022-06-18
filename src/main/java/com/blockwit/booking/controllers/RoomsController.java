@@ -20,12 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 
 @Controller
-@RequestMapping("/hotels")
+@RequestMapping({"/", "/hotels"})
 @AllArgsConstructor
 @Slf4j
 public class RoomsController {
@@ -188,32 +187,32 @@ public class RoomsController {
     }
 
 
-//    @GetMapping("/booked")
-//    public ModelAndView bookedHotels(RedirectAttributes redirectAttributes) {
-//
-//        ModelAndView mav = new ModelAndView();
-//
-//        String userName = securityService.getUsernameFromSecurityContext();
-//
-//        Optional<User> userOptional = userService.getUserByUsername(userName);
-//
-//        Iterable<Hotel> bookedHotels = null;
-//        if (userOptional.isPresent()) {
-//            try {
-//                bookedHotels = hotelService.bookedHotels(userOptional.get().getId());
-//            } catch (BookingNotFoundException e) {
-//                redirectAttributes.addFlashAttribute("message_error",
-//                        "Не удалось определить забронированные отели, попробуйте еще раз");
-//            }
-//
-//        } else if (userOptional.isEmpty()) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "Не удалось определить пользователя, " +
-//                            " для корректного отображения данных");
-//            return new ModelAndView("redirect:/hotels");
-//        }
-//        mav.setViewName("front/hotels-booked");
-//        mav.addObject("bookedHotels", bookedHotels);
-//        return mav;
-//    }
+    @GetMapping("/booked")
+    public ModelAndView bookedRooms(RedirectAttributes redirectAttributes) {
+
+        ModelAndView mav = new ModelAndView();
+
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        Optional<User> userOptional = userService.getUserByUsername(userName);
+
+        Iterable<Room> bookedRooms = null;
+        if (userOptional.isPresent()) {
+            try {
+                bookedRooms = roomService.getBookedRooms(userOptional.get().getId());
+            } catch (RoomNotFoundException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "Не удалось определить забронированные комнаты, попробуйте еще раз");
+            }
+
+        } else if (userOptional.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Не удалось определить пользователя, " +
+                            " для корректного отображения данных");
+            return new ModelAndView("redirect:/hotels");
+        }
+        mav.setViewName("front/rooms-booked");
+        mav.addObject("bookedRooms", bookedRooms);
+        return mav;
+    }
 }
