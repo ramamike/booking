@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<body>
+
+<div  th:fragment="itemFrontIcon (targetUrl, itemIcon)">
+    <a th:href="${targetUrl}" class="btn btn-outline-primary mx-2">
+        <i th:class="${itemIcon}"></i>
+    </a>
+</div>
+
+<div  th:fragment="itemFrontName (targetName, targetUrl)">
+    <a th:href="${targetUrl}">
+        <span th:text="${targetName}"></span>
+    </a>
+</div>
+
+</body>
+</html>

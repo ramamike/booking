@@ -15,17 +15,17 @@
 
         <div class="collapse navbar-collapse bs-navbar" id="bbs-navbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li th:replace="front/fragments/navbar/item :: item(targetName = 'отели', targetUrl = '/hotels')"/>
+                <li th:replace="front/fragments/navbar/item :: item(targetName = 'отели', targetUrl = '/hotels')"></li>
                 <li sec:authorize="isAuthenticated()"
-                    th:replace="front/fragments/navbar/item :: item(targetName = 'Забронированные', targetUrl = '/hotels/booked')"/>
+                    th:replace="front/fragments/navbar/item :: item(targetName = 'Забронированные', targetUrl = '/hotels/booked')"></li>
                 <li sec:authorize="hasAnyAuthority('ADMIN', 'PROVIDER')"
-                    th:replace="front/fragments/navbar/item :: item(targetName = 'добавить', targetUrl = 'hotels/add')"/>
+                    th:replace="front/fragments/navbar/item :: item(targetName = 'добавить', targetUrl = 'hotels/add')"></li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li sec:authorize="!isAuthenticated()"
-                    th:replace="front/fragments/navbar/item :: itemWithIcon(targetName = 'войти', targetUrl = '/app/login', menuItemIcon = 'fa-sign-in-alt')"/>
+                    th:replace="front/fragments/navbar/item :: itemWithIcon(targetName = 'войти', targetUrl = '/app/login', menuItemIcon = 'fa-sign-in-alt')"></li>
                 <li sec:authorize="isAuthenticated()"
-                    th:replace="front/fragments/navbar/item :: itemWithIcon(targetName = 'выйти', targetUrl = '/logout', menuItemIcon = 'fa-sign-out-alt')"/>
+                    th:replace="front/fragments/navbar/item :: itemWithIcon(targetName = 'выйти', targetUrl = '/logout', menuItemIcon = 'fa-sign-out-alt')"></li>
             </ul>
         </div>
     </div>

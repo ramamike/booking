@@ -23,7 +23,11 @@
                         <strong class="text-gray-dark" th:text="${hotel.getName()}"></strong>
                         <div class="d-flex justify-content-end">
                             <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
-                                        ~{front/fragments/hotel-edit :: hotel-edit} : ~{}"></div>
+                                        ~{front/fragments/itemFront ::
+                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
+                                                        itemIcon= 'fas fa-edit')}:
+                                                    ~{}">
+                            </div>
                             <form sec:authorize="hasAnyAuthority('CLIENT', 'ADMIN')"
                                   th:action="'/hotels/book/' + ${hotel.getId()}" method="post">
                                 <button class="btn btn-outline-primary" type="submit">
