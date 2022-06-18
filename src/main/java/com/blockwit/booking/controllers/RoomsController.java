@@ -123,10 +123,10 @@ public class RoomsController {
 
     @PostMapping("/{hotelId}/rooms/{roomId}/edit")
     public RedirectView roomUpdate(RedirectAttributes redirectAttributes,
-                                    @PathVariable(value = "hotelId") long hotelId,
-                                    @PathVariable(value = "roomId") long roomId,
-                                    @RequestParam String name, @RequestParam String description,
-                                    Model model) {
+                                   @PathVariable(value = "hotelId") long hotelId,
+                                   @PathVariable(value = "roomId") long roomId,
+                                   @RequestParam String name, @RequestParam String description,
+                                   Model model) {
 
         String userName = securityService.getUsernameFromSecurityContext();
 
@@ -160,29 +160,33 @@ public class RoomsController {
 
         return new RedirectView("/hotels/{hotelId}", true);
     }
-//
-//    @PostMapping("/book/{hotelId}")
-//    public RedirectView bookHotel(RedirectAttributes redirectAttributes,
-//                                  @PathVariable(value = "hotelId") long hotelId) {
-//
-//        String userName = securityService.getUsernameFromSecurityContext();
-//
-//        try {
-//            bookingService.bookHotel(hotelId, userName);
-//        } catch (HotelNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error", "К сожалению отель не найден!");
-//            return new RedirectView("/", true);
-//        } catch (UserNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error", "К сожалению пользователь не найден!");
-//            return new RedirectView("/", true);
-//        }
-//
-//        redirectAttributes.addFlashAttribute("message_success",
-//                "Отель забранирован!");
-//
-//        return new RedirectView("/hotels", true);
-//    }
-//
+
+    @PostMapping("/{hotelId}/rooms/{roomId}/book")
+    public RedirectView bookHotel(RedirectAttributes redirectAttributes,
+                                  @PathVariable(value = "roomId") long roomId) {
+
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        try {
+            if (!bookingService.bookRoom(roomId, userName)) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "К сожалению комната не забронирована!");
+                }
+        } catch (RoomNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению комната не найдена!");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению пользователь не найден!");
+            return new RedirectView("/hotels/{hotelId}", true);
+        }
+
+        redirectAttributes.addFlashAttribute("message_success",
+                "Комната забранирована!");
+
+        return new RedirectView("/hotels/{hotelId}", true);
+    }
+
 
 //    @GetMapping("/booked")
 //    public ModelAndView bookedHotels(RedirectAttributes redirectAttributes) {

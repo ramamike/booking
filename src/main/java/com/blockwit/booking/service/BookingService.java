@@ -2,8 +2,10 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Booking;
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.Room;
 import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.BookingRepository;
 import com.blockwit.booking.repository.HotelRepository;
@@ -12,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,21 +28,21 @@ public class BookingService {
 
     private UserService userService;
 
-    public Hotel bookHotel(long hotelId, String userName)
-            throws HotelNotFoundException, UserNotFoundException{
-
-        Hotel hotelForBook = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new HotelNotFoundException());
+    public boolean bookRoom(long roomId, String userName)
+            throws  UserNotFoundException, RoomNotFoundException {
 
         User user=userService.getUserByUsername(userName)
                 .orElseThrow(()->new UserNotFoundException());
 
+        Room room=roomRepository.findById(roomId)
+                .orElseThrow(()->new RoomNotFoundException());
+
         Booking booking = Booking.builder()
                 .userId(user.getId())
+                .roomId(room.getId())
+//                .rooms(List.of(room))
                 .build();
-        bookingRepository.save(booking);
-
-        return hotelForBook;
+        return bookingRepository.save(booking)!=null;
     }
 
 }
