@@ -38,7 +38,10 @@ public class RoomService {
     }
 
     public Iterable<Room> getBookedRooms(Long userId) throws RoomNotFoundException {
-        return roomRepository.getBookedRooms(userId);
+        return roomRepository.getBookedRoomsOrderedByName(userId);
     }
 
+    public Iterable<Room> getHotelRooms(Long hotelId) throws RoomNotFoundException {
+        return roomRepository.getRoomByHotelIdOrderedByName(hotelId);
+    }
 }

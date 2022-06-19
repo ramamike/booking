@@ -1,13 +1,14 @@
 package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.Room;
 import com.blockwit.booking.entity.User;
-import com.blockwit.booking.exceptions.BookingNotFoundException;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
+import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
-import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
+import com.blockwit.booking.service.RoomService;
 import com.blockwit.booking.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,7 @@ import java.util.Optional;
 public class HotelsController {
 
     private HotelService hotelService;
-    private BookingService bookingService;
+    private RoomService roomService;
     private UserService userService;
     private SecurityService securityService;
 
@@ -102,21 +103,37 @@ public class HotelsController {
     public ModelAndView showHotel(RedirectAttributes redirectAttributes,
                                   @PathVariable(value = "hotelId") long hotelId, Model model) {
 
-
         boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
+        String userName = securityService.getUsernameFromSecurityContext();
+
+        boolean permissionEdit = false;
+        try {
+            permissionEdit = isAdmin || hotelService.checkEditingPermission(hotelId, userName);
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        }
 
         Hotel hotel = null;
+        Iterable<Room> rooms = null;
         try {
-            hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
             ModelAndView mav = new ModelAndView();
-            mav.addObject(hotel);
-            mav.addObject("isAdmin", isAdmin);
+            hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
+            mav.addObject("hotel", hotel);
+            rooms=roomService.getHotelRooms(hotelId);
+            mav.addObject("rooms", rooms);
+            mav.addObject("permissionEdit", permissionEdit);
             mav.setViewName("front/hotel-general");
             return mav;
-
         } catch (HotelNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error",
                     "К сожалению отель не найден!");
+        } catch (RoomNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению комнаты не найдены!");
         }
 
         return new ModelAndView("redirect:/hotels");
@@ -125,6 +142,7 @@ public class HotelsController {
     @GetMapping("/{hotelId}/edit")
     public ModelAndView hotelDetails(RedirectAttributes redirectAttributes,
                                      @PathVariable(value = "hotelId") long hotelId, Model model) {
+
 
         Hotel hotel = null;
         try {
@@ -149,9 +167,10 @@ public class HotelsController {
                                     Model model) {
 
         String userName = securityService.getUsernameFromSecurityContext();
+        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 
         try {
-            if (!hotelService.checkEditingPermission(hotelId, userName)) {
+            if (!isAdmin || !hotelService.checkEditingPermission(hotelId, userName)) {
                 redirectAttributes.addFlashAttribute("message_error",
                         userName + " не может редактировать данную запись");
                 return new RedirectView("/hotels", true);

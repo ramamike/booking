@@ -8,13 +8,13 @@
         <div class="border-bottom pb-2 mb-2">
             <h6 class="pb-2 mb-2">Отель: <span th:text="${hotel.getName()}"/></h6>
             <span class="pb-2 d-block" th:text="${hotel.getDescription()}"></span>
-            <div sec:authorize="hasAnyAuthority('ADMIN', 'PROVIDER')"
-                 th:replace="front/fragments/itemFront ::
-                itemFrontNameIcon(targetName = 'Добавить комнату',
-                    targetUrl = ${hotel.getId}+'/rooms/add',
-                    itemIcon = 'fa fa-plus')"></div>
+            <div th:insert="${permissionEdit} ? ~{front/fragments/itemFront ::
+                                                    itemFrontNameIcon(targetName = 'Добавить комнату',
+                                                    targetUrl = ${hotel.getId}+'/rooms/add',
+                                                    itemIcon = 'fa fa-plus')} : ~{}">
+            </div>
         </div>
-        <th:block th:each="room : ${hotel.rooms}">
+        <th:block th:each="room : ${rooms}">
             <div class="d-flex text-muted pt-3">
                 <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
                      xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
@@ -28,7 +28,7 @@
                         <strong class="text-gray-dark" th:text="${room.getName()}"></strong>
                         <span class="d-block" th:text="${room.getDescription()}"></span>
                         <div class="d-flex justify-content-end">
-                            <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
+                            <div th:insert="${permissionEdit} ?
                                         ~{front/fragments/itemFront ::
                                         itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()}
                                             +'/rooms/'+ ${room.getId()} + '/edit',

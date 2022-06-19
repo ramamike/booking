@@ -66,7 +66,21 @@ public class RoomsController {
             Model model) {
 
         String userName = securityService.getUsernameFromSecurityContext();
+        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 
+        try {
+            if (!isAdmin && !hotelService.checkEditingPermission(hotelId, userName)) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        userName + " не может добавлять комнату для данного отеля");
+                return new RedirectView("/hotels/{hotelId}", true);
+            }
+        } catch (HotelNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        } catch (UserNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "К сожалению, не удалось получить информация для пользователя");
+        }
         Optional<User> userOptional = userService.getUserByUsername(userName);
 
         if (userOptional.isEmpty()) {
@@ -128,9 +142,10 @@ public class RoomsController {
                                    Model model) {
 
         String userName = securityService.getUsernameFromSecurityContext();
+        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 
         try {
-            if (!hotelService.checkEditingPermission(hotelId, userName)) {
+            if (!isAdmin && !hotelService.checkEditingPermission(hotelId, userName)) {
                 redirectAttributes.addFlashAttribute("message_error",
                         userName + " не может редактировать данную запись");
                 return new RedirectView("/hotels/{hotelId}", true);
