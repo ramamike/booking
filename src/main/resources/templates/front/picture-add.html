@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{front/layouts/main}">
+<div layout:fragment="content">
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h6 class="border-bottom pb-2 mb-2">Добавить картинку: </h6>
+        <div class="container col-md-6">
+            <div class="mb-5">
+                <form th:action="@{/hotels/pictures/add}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <label for="formFile" class="form-label">Bootstrap 5 image Upload with Preview</label>
+                    <input class="form-control" type="file" id="formFile" name="file" onchange="preview()">
+                    <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button>
+                </form>
+            </div>
+            <img id="frame" src="" class="img-fluid" />
+        </div>
+        <div>
+<!--            <img src="/img/${picture.name}"/>-->
+        </div>
+    </div>
+
+</div>
+</html>
