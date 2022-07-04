@@ -13,6 +13,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 
@@ -35,21 +38,25 @@ public class PicturesController {
     public RedirectView addPicture(RedirectAttributes redirectAttributes,
                                    @RequestParam("file") MultipartFile multipartFile) throws IOException {
 
-        if(multipartFile!=null) {
-            File uploadDir= new File(uploadPath);
-            if(!uploadDir.exists()) {
+        if (multipartFile != null) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
                 uploadDir.mkdir();
-                String uuidFile=UUID.randomUUID().toString();
-                String resultFileName=uuidFile + "." + multipartFile.getOriginalFilename();
-                Picture picture = Picture.builder()
-                        .name(resultFileName)
-                        .build();
-                multipartFile. transferTo(new File(uploadPath + "/" + resultFileName));
+            }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + multipartFile.getOriginalFilename();
+            Picture picture = Picture.builder()
+                    .name(resultFileName)
+                    .build();
+
+            multipartFile.transferTo(new File(uploadPath + "/" + resultFileName));
+            if (new File(uploadPath + "/" + resultFileName).exists()) {
+                redirectAttributes.addFlashAttribute("message_success",
+                        "File is uploaded");
             }
         }
 
-        redirectAttributes.addFlashAttribute("message_error",
-                "Ups");
+
         return new RedirectView("/hotels", true);
     }
 }

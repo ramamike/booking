@@ -91,8 +91,6 @@
             <version>6.1.0</version>
         </dependency>
 
-
-        <!-- other dependencies -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
