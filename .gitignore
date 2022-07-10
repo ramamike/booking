@@ -3,6 +3,7 @@ env.properties
 HELP.md
 node_modules/
 target/
+uploads/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###

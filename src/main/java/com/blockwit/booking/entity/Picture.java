@@ -8,9 +8,9 @@ import java.util.List;
 
 @Entity
 @Setter
-@Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Builder
 @Table(name="pictures")
 public class Picture {
@@ -27,4 +27,7 @@ public class Picture {
     private String path;
 
     private String format;
+
+//    @Lob
+//    private byte[] data;
 }

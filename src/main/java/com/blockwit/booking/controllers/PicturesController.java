@@ -1,6 +1,9 @@
 package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Picture;
+import com.blockwit.booking.exceptions.UserNotFoundException;
+import com.blockwit.booking.security.SecurityService;
+import com.blockwit.booking.service.PictureService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,21 +16,25 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @Controller
 @RequestMapping("/hotels/pictures")
-@AllArgsConstructor
-@NoArgsConstructor
 @Slf4j
 public class PicturesController {
 
+    private PictureService pictureService;
+    private SecurityService securityService;
+
     @Value("${upload.path}")
     private String uploadPath;
+
+    public PicturesController(PictureService pictureService, SecurityService securityService) {
+        this.pictureService = pictureService;
+        this.securityService = securityService;
+    }
 
     @GetMapping("/add")
     public String addPicture() {
@@ -43,20 +50,28 @@ public class PicturesController {
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + multipartFile.getOriginalFilename();
-            Picture picture = Picture.builder()
-                    .name(resultFileName)
-                    .build();
 
-            multipartFile.transferTo(new File(uploadPath + "/" + resultFileName));
-            if (new File(uploadPath + "/" + resultFileName).exists()) {
-                redirectAttributes.addFlashAttribute("message_success",
-                        "File is uploaded");
+            Date dateNow = new Date();
+            String dateForNow = (new SimpleDateFormat("yyyy.MM")).format(dateNow);
+
+            String uploadPathPerMonth=uploadPath +"/" + dateForNow;
+            File uploadDirPerMonth=new File(uploadPathPerMonth);
+            if(!uploadDirPerMonth.exists()) {
+                uploadDirPerMonth.mkdir();
+            }
+
+            String userName = securityService.getUsernameFromSecurityContext();
+
+            try {
+                pictureService.savePicture(multipartFile, uploadPathPerMonth, userName);
+            } catch (UserNotFoundException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "К сожалению, не удалось получить информация для пользователя");
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "К сожалению, не удалось сохранить информацию");
             }
         }
-
-
-        return new RedirectView("/hotels", true);
+        return new RedirectView("/hotels/pictures/add", true);
     }
 }
