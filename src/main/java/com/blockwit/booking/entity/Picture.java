@@ -3,8 +3,6 @@ package com.blockwit.booking.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Setter
@@ -28,6 +26,10 @@ public class Picture {
 
     private String format;
 
-//    @Lob
-//    private byte[] data;
+    @ManyToOne
+    @JoinColumn (
+            name = "hotel_id",
+            nullable = false
+    )
+    private Hotel hotel;
 }

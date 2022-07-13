@@ -1,7 +1,9 @@
 package com.blockwit.booking.controllers;
 
+import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
+import com.blockwit.booking.service.HotelService;
 import com.blockwit.booking.service.PictureService;
 import com.blockwit.booking.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.Optional;
 
 
 @Controller
@@ -26,9 +29,14 @@ public class PicturesController {
     private PictureService pictureService;
     private SecurityService securityService;
 
-    public PicturesController(PictureService pictureService, SecurityService securityService) {
+    private HotelService hotelService;
+
+    public PicturesController(PictureService pictureService,
+                              SecurityService securityService,
+                              HotelService hotelService) {
         this.pictureService = pictureService;
         this.securityService = securityService;
+        this.hotelService = hotelService;
     }
 
     @GetMapping("/add")
@@ -46,8 +54,16 @@ public class PicturesController {
 
             String userName = securityService.getUsernameFromSecurityContext();
 
+            Optional<Hotel> hotelOptional = hotelService.getHotelById(1l);
+            if (hotelOptional.isEmpty()) {
+                redirectAttributes.addFlashAttribute("message_error",
+                        "Не удалось определить отель, " +
+                                " для корректного добавления изображения");
+                return new RedirectView("/hotels", true);
+            }
+
             try {
-                pictureService.savePicture(multipartFile, uploadPathPerMonth, userName);
+                pictureService.savePicture(multipartFile, uploadPathPerMonth, userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось получить информация для пользователя");
@@ -55,9 +71,8 @@ public class PicturesController {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось сохранить информацию");
             }
-
             redirectAttributes.addFlashAttribute("message_success",
-                    "Картинка добавлена");
+                    "Избображение добавлено");
 
         }
         return new RedirectView("/hotels/pictures/add", true);

@@ -1,5 +1,6 @@
 package com.blockwit.booking.service;
 
+import com.blockwit.booking.entity.Hotel;
 import com.blockwit.booking.entity.Picture;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.repository.PictureRepository;
@@ -23,11 +24,13 @@ public class PictureService {
 
     public Picture savePicture(MultipartFile multipartFile,
                                String uploadPath,
-                               String userName) throws UserNotFoundException, IOException {
+                               String userName,
+                               Hotel hotel)
+            throws UserNotFoundException, IOException {
         String uuidFile = UUID.randomUUID().toString();
         String resultFileName = uuidFile + "." + multipartFile.getOriginalFilename();
-        Long userId= userService.getUserByUsername(userName)
-                .orElseThrow(()-> new UserNotFoundException()).getId();
+        Long userId = userService.getUserByUsername(userName)
+                .orElseThrow(() -> new UserNotFoundException()).getId();
         String path = uploadPath + "/" + resultFileName;
 
         multipartFile.transferTo(new File(path));
@@ -37,6 +40,7 @@ public class PictureService {
                 .path(path)
                 .owner_id(userId)
                 .format(multipartFile.getContentType())
+                .hotel(hotel)
                 .build();
 
         return pictureRepository.save(picture);

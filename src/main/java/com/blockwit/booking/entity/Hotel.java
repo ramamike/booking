@@ -34,4 +34,11 @@ public class Hotel {
             mappedBy = "hotel"
     )
     private Set<Room> rooms = new HashSet<>();
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "hotel"
+    )
+    private Set<Picture> pictures = new HashSet<>();
 }
