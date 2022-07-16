@@ -23,7 +23,8 @@ public class PictureService {
     }
 
     public Picture savePicture(MultipartFile multipartFile,
-                               String uploadPath,
+                               String absolutePath,
+                               String picturePath,
                                String userName,
                                Hotel hotel)
             throws UserNotFoundException, IOException {
@@ -31,13 +32,13 @@ public class PictureService {
         String resultFileName = uuidFile + "." + multipartFile.getOriginalFilename();
         Long userId = userService.getUserByUsername(userName)
                 .orElseThrow(() -> new UserNotFoundException()).getId();
-        String path = uploadPath + "/" + resultFileName;
+        String path = absolutePath + "/" + resultFileName;
 
         multipartFile.transferTo(new File(path));
 
         Picture picture = Picture.builder()
                 .name(multipartFile.getOriginalFilename())
-                .path(path)
+                .path(picturePath+"/"+resultFileName)
                 .owner_id(userId)
                 .format(multipartFile.getContentType())
                 .hotel(hotel)

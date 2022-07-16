@@ -67,10 +67,12 @@ public class PicturesController {
                 return new RedirectView("/hotels", true);
             }
 
-            String uploadPathPerMonth = Utils.getUploadPathPerMonth(uploadPath + picturesPath);
+            String picturePathPerMonth = Utils.getUploadPathPerMonth(picturesPath);
+            String absolutePath = uploadPath + picturePathPerMonth;
 
             try {
-                pictureService.savePicture(multipartFile, uploadPathPerMonth, userName, hotelOptional.get());
+                pictureService.savePicture(multipartFile, absolutePath,
+                        picturePathPerMonth, userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось получить информация для пользователя");
