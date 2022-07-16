@@ -7,7 +7,7 @@
         <h6 class="border-bottom pb-2 mb-2">Добавить картинку: </h6>
         <div class="container col-md-6">
             <div class="mb-5">
-                <form th:action="@{/hotels/pictures/add}"
+                <form th:action="'/hotels/'+${hotelId} +'/picture/add'"
                       method="post"
                       enctype="multipart/form-data">
                     <label for="formFile" class="form-label">Bootstrap 5 image Upload with Preview</label>
@@ -15,7 +15,7 @@
                     <button onclick="clearImage()" class="btn btn-primary mt-3">Upload</button>
                 </form>
             </div>
-<!--            <img id="frame" src="" class="img-fluid" />-->
+            <img id="frame" src="" class="img-fluid" />
         </div>
     </div>
 

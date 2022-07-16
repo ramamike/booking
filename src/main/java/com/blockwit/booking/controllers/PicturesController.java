@@ -74,14 +74,16 @@ public class PicturesController {
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось получить информация для пользователя");
+                return new RedirectView("/hotels", true);
             } catch (IOException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось сохранить информацию");
+                return new RedirectView("/hotels", true);
             }
             redirectAttributes.addFlashAttribute("message_success",
                     "Избображение добавлено");
 
         }
-        return new RedirectView("/hotels/pictures/add", true);
+        return new RedirectView("/hotels", true);
     }
 }
