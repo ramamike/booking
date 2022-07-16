@@ -25,6 +25,8 @@ public class PicturesController {
 
     @Value("${upload.path}")
     private String uploadPath;
+    @Value("${pictures.path}")
+    private String picturesPath;
 
     private PictureService pictureService;
     private SecurityService securityService;
@@ -50,8 +52,6 @@ public class PicturesController {
 
         if (multipartFile != null) {
 
-            String uploadPathPerMonth = Utils.getUploadPath(uploadPath);
-
             String userName = securityService.getUsernameFromSecurityContext();
 
             Optional<Hotel> hotelOptional = hotelService.getHotelById(1l);
@@ -61,6 +61,8 @@ public class PicturesController {
                                 " для корректного добавления изображения");
                 return new RedirectView("/hotels", true);
             }
+
+            String uploadPathPerMonth = Utils.getUploadPathPerMonth(uploadPath + picturesPath);
 
             try {
                 pictureService.savePicture(multipartFile, uploadPathPerMonth, userName, hotelOptional.get());
