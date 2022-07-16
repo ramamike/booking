@@ -10,13 +10,22 @@
                 <form th:action="'/hotels/'+${hotelId} +'/picture/add'"
                       method="post"
                       enctype="multipart/form-data">
-                    <label for="formFile" class="form-label">Bootstrap 5 image Upload with Preview</label>
+                    <label for="formFile" class="form-label">Загрузить изображение</label>
                     <input class="form-control" type="file" id="formFile" name="file" onchange="preview()">
                     <button onclick="clearImage()" class="btn btn-primary mt-3">Upload</button>
                 </form>
             </div>
             <img id="frame" src="" class="img-fluid" />
         </div>
+        <script>
+            function preview() {
+                frame.src = URL.createObjectURL(event.target.files[0]);
+            }
+            function clearImage() {
+                document.getElementById('formFile').value = null;
+                frame.src = "";
+            }
+        </script>
     </div>
 
 </div>
