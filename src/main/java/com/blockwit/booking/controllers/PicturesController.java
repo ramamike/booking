@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 
 @Controller
-@RequestMapping("/hotels/pictures")
+@RequestMapping("/hotels")
 @Slf4j
 public class PicturesController {
 
@@ -41,20 +42,24 @@ public class PicturesController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping("/add")
-    public String addPicture() {
-        return "front/picture-add";
+    @GetMapping("/{hotelId}/picture/add")
+    public ModelAndView addPicture(@PathVariable(value = "hotelId") long hotelId) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("front/picture-add");
+        mav.addObject("hotelId", hotelId);
+        return mav;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/{hotelId}/picture/add")
     public RedirectView addPicture(RedirectAttributes redirectAttributes,
-                                   @RequestParam("file") MultipartFile multipartFile) throws IOException {
+                                   @PathVariable(value = "hotelId") long hotelId,
+                                   @RequestParam("file") MultipartFile multipartFile) {
 
         if (multipartFile != null) {
 
             String userName = securityService.getUsernameFromSecurityContext();
 
-            Optional<Hotel> hotelOptional = hotelService.getHotelById(1l);
+            Optional<Hotel> hotelOptional = hotelService.getHotelById(hotelId);
             if (hotelOptional.isEmpty()) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "Не удалось определить отель, " +

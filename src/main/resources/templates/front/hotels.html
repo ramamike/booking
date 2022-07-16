@@ -30,6 +30,13 @@
                                     <div class="justify-content-end">
                                         <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
                                                     ~{front/fragments/itemFront ::
+                                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
+                                                            itemIcon= 'fas fa-camera')}: ~{}">
+                                        </div>
+                                    </div>
+                                    <div class="justify-content-end">
+                                        <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
+                                                    ~{front/fragments/itemFront ::
                                                         itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
                                                             itemIcon= 'fas fa-edit')}: ~{}">
                                         </div>
