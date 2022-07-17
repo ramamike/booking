@@ -26,8 +26,6 @@ public class PicturesController {
 
     @Value("${upload.path}")
     private String uploadPath;
-    @Value("${pictures.path}")
-    private String picturesPath;
 
     private PictureService pictureService;
     private SecurityService securityService;
@@ -67,12 +65,11 @@ public class PicturesController {
                 return new RedirectView("/hotels", true);
             }
 
-            String picturePathPerMonth = Utils.getUploadPathPerMonth(picturesPath);
-            String absolutePath = uploadPath + picturePathPerMonth;
+            String absolutePath = Utils.getUploadPathPerMonth(uploadPath);
 
             try {
                 pictureService.savePicture(multipartFile, absolutePath,
-                        picturePathPerMonth, userName, hotelOptional.get());
+                         userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось получить информация для пользователя");

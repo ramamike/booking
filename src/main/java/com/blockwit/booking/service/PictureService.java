@@ -24,7 +24,6 @@ public class PictureService {
 
     public Picture savePicture(MultipartFile multipartFile,
                                String absolutePath,
-                               String picturePath,
                                String userName,
                                Hotel hotel)
             throws UserNotFoundException, IOException {
@@ -38,7 +37,7 @@ public class PictureService {
 
         Picture picture = Picture.builder()
                 .name(multipartFile.getOriginalFilename())
-                .path(picturePath+"/"+resultFileName)
+                .path(absolutePath)
                 .owner_id(userId)
                 .format(multipartFile.getContentType())
                 .hotel(hotel)
