@@ -35,7 +35,6 @@ public class PictureService {
         String path = absolutePath + "/" + resultFileName;
 
         multipartFile.transferTo(new File(path));
-
         Picture picture = Picture.builder()
                 .name(multipartFile.getOriginalFilename())
                 .path(picturePath + "/" + resultFileName)
