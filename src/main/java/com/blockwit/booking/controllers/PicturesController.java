@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -68,11 +69,23 @@ public class PicturesController {
                 return new RedirectView("/hotels", true);
             }
 
-            String absolutePath = Utils.getUploadPathPerMonth(uploadPath+picturesPath);
+            File uploadDir = new File(uploadPath + picturesPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String absolutePath = Utils.getPathPerMonth(uploadPath + picturesPath);
+
+            File absoluteDir=new File(absolutePath);
+            if(!absoluteDir.exists()) {
+                absoluteDir.mkdir();
+            }
+
+            String picturesPathPrMonth= Utils.getPathPerMonth(picturesPath);
 
             try {
-                pictureService.savePicture(multipartFile, absolutePath, picturesPath,
-                         userName, hotelOptional.get());
+                pictureService.savePicture(multipartFile, absolutePath, picturesPathPrMonth,
+                        userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению, не удалось получить информация для пользователя");

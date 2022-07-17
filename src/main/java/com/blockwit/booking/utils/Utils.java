@@ -6,23 +6,14 @@ import java.util.Date;
 
 public class Utils {
 
-    public static String getUploadPathPerMonth(String uploadPath) {
 
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
+    public static String getPathPerMonth(String path) {
 
         Date dateNow = new Date();
         String dateForNow = (new SimpleDateFormat("yyyy.MM")).format(dateNow);
+        String uploadPathPerMonth=path + "/" + dateForNow;
 
-        String uploadPathPerMonth=uploadPath + "/" + dateForNow;
-        File uploadDirPerMonth=new File(uploadPathPerMonth);
-        if(!uploadDirPerMonth.exists()) {
-            uploadDirPerMonth.mkdir();
-        }
-
-        return uploadPathPerMonth;
+        return path + "/" + dateForNow;
     }
 
 }
