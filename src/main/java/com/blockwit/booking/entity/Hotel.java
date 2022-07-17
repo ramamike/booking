@@ -40,5 +40,5 @@ public class Hotel {
             fetch = FetchType.LAZY,
             mappedBy = "hotel"
     )
-    private Set<Picture> pictures = new HashSet<>();
+    private List<Picture> pictures = new ArrayList<>();
 }
