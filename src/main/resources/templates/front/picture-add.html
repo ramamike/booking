@@ -15,18 +15,13 @@
                     <button onclick="clearImage()" class="btn btn-primary mt-3">Upload</button>
                 </form>
             </div>
-            <img id="frame" src="" class="img-fluid" />
+            <img id="frame" src="" class="img-fluid"/>
         </div>
-        <script>
+    </div>
+    <script>
             function preview() {
                 frame.src = URL.createObjectURL(event.target.files[0]);
             }
-            function clearImage() {
-                document.getElementById('formFile').value = null;
-                frame.src = "";
-            }
-        </script>
-    </div>
-
+    </script>
 </div>
 </html>

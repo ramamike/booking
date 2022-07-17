@@ -13,7 +13,6 @@ public class Utils {
             uploadDir.mkdir();
         }
 
-
         Date dateNow = new Date();
         String dateForNow = (new SimpleDateFormat("yyyy.MM")).format(dateNow);
 
