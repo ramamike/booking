@@ -24,7 +24,7 @@
                                 <span class="justify-content-start" th:text="${hotel.getDescription()}"></span>
                                 <figure>
                                     <img th:src="${hotel.getPictures().size > 0} ?
-                                                    ${hotel.getPictures().get(0).getPath()} :~{}"
+                                                    @{${hotel.getPictures().get(0).getPath()}} :~{}"
                                          class="rounded justify-content-end"
                                          alt="loader" style="width: 150px;height: 120px;" id="loader"/>
                                 </figure>

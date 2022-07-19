@@ -37,6 +37,9 @@ public class MVCConfig implements WebMvcConfigurer {
 	@Value("${upload.path}")
 	private String uploadPath;
 
+	@Value("${pictures.path}")
+	private String picturesPath;
+
 	private final AppInterceptor appInterceptor;
 
 	public MVCConfig(AppInterceptor appInterceptor) {
@@ -54,8 +57,8 @@ public class MVCConfig implements WebMvcConfigurer {
 		registry.addInterceptor(appInterceptor).addPathPatterns(
 			"/",
 			"/hotels/add",
-			"/hotels/edit/**",
-			"/hotels/book/**"
+			"/hotels/*/edit/**",
+			"/hotels/*/book/**"
 		);
 
 		LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
@@ -76,11 +79,5 @@ public class MVCConfig implements WebMvcConfigurer {
 		CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
 		cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
 		return cookieLocaleResolver;
-	}
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/png/**")
-				.addResourceLocations("file://" + uploadPath + "/");
 	}
 }
