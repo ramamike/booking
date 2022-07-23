@@ -16,6 +16,7 @@ package com.blockwit.booking.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.CacheControl;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -37,9 +38,6 @@ public class MVCConfig implements WebMvcConfigurer {
 	@Value("${upload.path}")
 	private String uploadPath;
 
-	@Value("${pictures.path}")
-	private String picturesPath;
-
 	private final AppInterceptor appInterceptor;
 
 	public MVCConfig(AppInterceptor appInterceptor) {
@@ -47,11 +45,17 @@ public class MVCConfig implements WebMvcConfigurer {
 	}
 
 	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/pictures/**").addResourceLocations("file://" + uploadPath + "/pictures/");
+	}
+
+	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		WebContentInterceptor interceptor = new WebContentInterceptor();
 		interceptor.addCacheMapping(CacheControl.maxAge(365, TimeUnit.DAYS)
 			.noTransform()
-			.mustRevalidate(), "/css/*", "/js/**", "/img/**", "/webjars/**", "/app/login", "/logout");
+			.mustRevalidate(),
+				"/css/*", "/js/**", "/img/**", "/webjars/**", "/app/login", "/logout");
 		registry.addInterceptor(interceptor);
 
 		registry.addInterceptor(appInterceptor).addPathPatterns(

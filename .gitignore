@@ -1,6 +1,6 @@
 env.properties
 /src/main/resources/application.properties
-/src/main/resources/static/pictures
+/pictures
 HELP.md
 node_modules/
 target/

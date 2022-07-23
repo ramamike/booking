@@ -5,7 +5,6 @@ import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
 import com.blockwit.booking.service.HotelService;
 import com.blockwit.booking.service.PictureService;
-import com.blockwit.booking.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 
@@ -27,9 +28,6 @@ public class PicturesController {
 
     @Value("${upload.path}")
     private String uploadPath;
-
-    @Value("${pictures.path}")
-    private String picturesPath;
 
     private PictureService pictureService;
     private SecurityService securityService;
@@ -69,22 +67,21 @@ public class PicturesController {
                 return new RedirectView("/hotels", true);
             }
 
-            File uploadDir = new File(uploadPath + picturesPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+            File picturesDir = new File(uploadPath + "/pictures");
+            if (!picturesDir.exists()) {
+                picturesDir.mkdir();
             }
 
-            String absolutePath = Utils.getPathPerMonth(uploadPath + picturesPath);
+            Date dateNow = new Date();
+            String relativePathPerMonth = "/pictures/" + (new SimpleDateFormat("yyyy.MM")).format(dateNow);
 
-            File absoluteDir=new File(absolutePath);
-            if(!absoluteDir.exists()) {
-                absoluteDir.mkdir();
+            String absolutePathPerMonth = uploadPath + relativePathPerMonth;
+            File absolutePathPerMonthDir = new File(absolutePathPerMonth);
+            if (!absolutePathPerMonthDir.exists()) {
+                absolutePathPerMonthDir.mkdir();
             }
-
-            String picturesPathPrMonth= Utils.getPathPerMonth(picturesPath);
-
             try {
-                pictureService.savePicture(multipartFile, absolutePath, picturesPathPrMonth,
+                pictureService.savePicture(multipartFile, absolutePathPerMonth, relativePathPerMonth,
                         userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",
