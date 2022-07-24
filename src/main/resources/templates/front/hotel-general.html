@@ -7,12 +7,14 @@
     <div class="my-3 p-3 bg-body rounded shadow-sm">
         <div class="border-bottom pb-2 mb-2">
             <h6 class="pb-2 mb-2">Отель: <span th:text="${hotel.getName()}"/></h6>
-            <span class="pb-2 d-block" th:text="${hotel.getDescription()}"></span>
-            <div th:insert="${permissionEdit} ? ~{front/fragments/itemFront ::
-                                                    itemFrontNameIcon(targetName = 'Добавить комнату',
-                                                    targetUrl = ${hotel.getId}+'/rooms/add',
-                                                    itemIcon = 'fa fa-plus')} : ~{}">
+            <div class="d-block d-flex">
+                <span class="me-auto" th:text="${hotel.getDescription()}"></span>
+                <div th:replace="front/fragments/showPicture :: showPictureHotel"></div>
             </div>
+            <div th:insert="${permissionEdit} ? ~{front/fragments/itemFront ::
+                                                        itemFrontNameIcon(targetName = 'Добавить комнату',
+                                                        targetUrl = ${hotel.getId}+'/rooms/add',
+                                                        itemIcon = 'fa fa-plus')} : ~{}"></div>
         </div>
         <th:block th:each="room : ${rooms}">
             <div class="d-flex text-muted pt-3">

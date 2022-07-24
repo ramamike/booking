@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <body>
-<div th:fragment="showPicture">
+<div th:fragment="showPictureHotel">
         <div th:insert="${hotel.getPictures().size == 0 && (isAdmin || hotel.getOwnerId()==userId)} ?
                                                             ~{front/fragments/itemFront ::
                                                                 itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',

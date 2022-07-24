@@ -16,20 +16,15 @@
                     <text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text>
                 </svg>
                 <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-                    <div>
-                        <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}"
-                           class="text-gray-dark" th:text="${hotel.getName()}"></a>
-                        <div class="d-block">
-                            <div class="d-flex">
-                                <span class="me-auto" th:text="${hotel.getDescription()}"></span>
-                                <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
-                                                    ~{front/fragments/itemFront ::
-                                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
-                                                            itemIcon= 'fas fa-edit')}: ~{}">
-                                </div>
-                                <div th:replace="front/fragments/showPicture :: showPicture"></div>
-                            </div>
-                        </div>
+                    <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}"
+                       class="text-gray-dark" th:text="${hotel.getName()}"></a>
+                    <div class="d-block d-flex">
+                        <span class="me-auto" th:text="${hotel.getDescription()}"></span>
+                        <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
+                                            ~{front/fragments/itemFront ::
+                                                itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
+                                                    itemIcon= 'fas fa-edit')}: ~{}"></div>
+                        <div th:replace="front/fragments/showPicture :: showPictureHotel"></div>
                     </div>
                 </div>
             </div>
