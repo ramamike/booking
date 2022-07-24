@@ -7,10 +7,13 @@
                                                                 itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
                                                                     itemIcon= 'fas fa-camera')}: ~{}">
         </div>
-        <img th:src="${hotel.getPictures().size > 0} ?
-                                                            ${hotel.getPictures().get(0).getPath()} :~{}"
-             class="rounded"
-             alt="loader" style="width: 150px;height: 120px;" id="loader"/>
+        <a th:href="${hotel.getPictures().size > 0} ?
+                ${hotel.getPictures().get(0).getPath()} :~{}">
+                <img th:src="${hotel.getPictures().size > 0} ?
+                                             ${hotel.getPictures().get(0).getPath()} :~{}"
+                     class="img-fluid rounded"
+                     alt="loader" style="width: 150px;height: 120px;" id="loader"/>
+        </a>
 </div>
 </body>
 </html>
