@@ -27,15 +27,7 @@
                                                         itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
                                                             itemIcon= 'fas fa-edit')}: ~{}">
                                 </div>
-                                <div th:insert="${hotel.getPictures().size == 0 && (isAdmin || hotel.getOwnerId()==userId)} ?
-                                                    ~{front/fragments/itemFront ::
-                                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
-                                                            itemIcon= 'fas fa-camera')}: ~{}">
-                                </div>
-                                <img th:src="${hotel.getPictures().size > 0} ?
-                                                    ${hotel.getPictures().get(0).getPath()} :~{}"
-                                     class="rounded"
-                                     alt="loader" style="width: 150px;height: 120px;" id="loader"/>
+                                <div th:replace="front/fragments/showPicture :: showPicture"></div>
                             </div>
                         </div>
                     </div>
