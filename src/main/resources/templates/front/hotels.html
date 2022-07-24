@@ -5,7 +5,7 @@
 <div layout:fragment="content">
 
     <div class="my-3 p-3 bg-body rounded shadow-sm">
-        <h6 class="border-bottom pb-2 mb-2">Топ послдених отелей</h6>
+        <h6 class="border-bottom pb-2 mb-2">Топ последних отелей</h6>
 
         <th:block th:each="hotel : ${hotels}">
             <div class="d-flex text-muted ptg-3">
@@ -20,26 +20,22 @@
                         <a style="font-weight:bold" th:href="'/hotels/'+${hotel.getId()}"
                            class="text-gray-dark" th:text="${hotel.getName()}"></a>
                         <div class="d-block">
-                            <div class="d-flex flex-row">
-                                <span class="justify-content-start" th:text="${hotel.getDescription()}"></span>
-                                <img th:src="${hotel.getPictures().size > 0} ?
-                                                    @{${hotel.getPictures().get(0).getPath()}} :~{}"
-                                     class="rounded justify-content-end"
-                                     alt="loader" style="width: 150px;height: 120px;" id="loader"/>
-                                <div class="justify-content-end">
-                                    <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
-                                                    ~{front/fragments/itemFront ::
-                                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
-                                                            itemIcon= 'fas fa-camera')}: ~{}">
-                                    </div>
-                                </div>
-                                <div class="justify-content-end">
-                                    <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
+                            <div class="d-flex">
+                                <span class="me-auto" th:text="${hotel.getDescription()}"></span>
+                                <div th:insert="${isAdmin || hotel.getOwnerId()==userId} ?
                                                     ~{front/fragments/itemFront ::
                                                         itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/edit',
                                                             itemIcon= 'fas fa-edit')}: ~{}">
-                                    </div>
                                 </div>
+                                <div th:insert="${hotel.getPictures().size == 0 && (isAdmin || hotel.getOwnerId()==userId)} ?
+                                                    ~{front/fragments/itemFront ::
+                                                        itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
+                                                            itemIcon= 'fas fa-camera')}: ~{}">
+                                </div>
+                                <img th:src="${hotel.getPictures().size > 0} ?
+                                                    ${hotel.getPictures().get(0).getPath()} :~{}"
+                                     class="rounded"
+                                     alt="loader" style="width: 150px;height: 120px;" id="loader"/>
                             </div>
                         </div>
                     </div>
