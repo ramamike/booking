@@ -42,17 +42,22 @@ public class PicturesController {
         this.hotelService = hotelService;
     }
 
-    @GetMapping("/{hotelId}/picture/add")
-    public ModelAndView addPicture(@PathVariable(value = "hotelId") long hotelId) {
+    @GetMapping({"/{hotelId}/picture/add", "/{hotelId}/rooms/{roomId}/picture/add"} )
+    public ModelAndView addPicture(@PathVariable(value = "hotelId") long hotelId,
+                                   @PathVariable(value = "roomId") Optional<Long> roomId) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("front/picture-add");
         mav.addObject("hotelId", hotelId);
+        if(roomId.isPresent()){
+            mav.addObject("roomId", roomId);
+        }
         return mav;
     }
 
-    @PostMapping("/{hotelId}/picture/add")
+    @PostMapping({"/{hotelId}/picture/add", "/{hotelId}/rooms/{roomId}/picture/add"})
     public RedirectView addPicture(RedirectAttributes redirectAttributes,
                                    @PathVariable(value = "hotelId") long hotelId,
+                                   @PathVariable(required = false, value = "roomId") Long roomId,
                                    @RequestParam("file") MultipartFile multipartFile) {
 
         if (multipartFile != null) {
@@ -66,6 +71,7 @@ public class PicturesController {
                                 " для корректного добавления изображения");
                 return new RedirectView("/hotels", true);
             }
+
 
             File picturesDir = new File(uploadPath + "/pictures");
             if (!picturesDir.exists()) {

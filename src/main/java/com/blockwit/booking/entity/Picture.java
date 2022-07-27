@@ -28,8 +28,14 @@ public class Picture {
 
     @ManyToOne
     @JoinColumn (
-            name = "hotel_id",
-            nullable = false
+            name = "hotel_id"
     )
     private Hotel hotel;
+
+    @ManyToOne
+    @JoinColumn (
+            name = "room_id"
+    )
+    private Room room;
+
 }

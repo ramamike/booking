@@ -38,4 +38,11 @@ public class Room {
             inverseJoinColumns = @JoinColumn(name = "booking_id")
     )
     private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "room"
+    )
+    private List<Picture> pictures = new ArrayList<>();
 }
