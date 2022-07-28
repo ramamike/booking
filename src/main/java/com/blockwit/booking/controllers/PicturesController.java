@@ -1,10 +1,13 @@
 package com.blockwit.booking.controllers;
 
 import com.blockwit.booking.entity.Hotel;
+import com.blockwit.booking.entity.Room;
+import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
 import com.blockwit.booking.security.SecurityService;
 import com.blockwit.booking.service.HotelService;
 import com.blockwit.booking.service.PictureService;
+import com.blockwit.booking.service.RoomService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -34,21 +37,25 @@ public class PicturesController {
 
     private HotelService hotelService;
 
+    private RoomService roomService;
+
     public PicturesController(PictureService pictureService,
                               SecurityService securityService,
-                              HotelService hotelService) {
+                              HotelService hotelService,
+                              RoomService roomService) {
         this.pictureService = pictureService;
         this.securityService = securityService;
         this.hotelService = hotelService;
+        this.roomService = roomService;
     }
 
-    @GetMapping({"/{hotelId}/picture/add", "/{hotelId}/rooms/{roomId}/picture/add"} )
+    @GetMapping({"/{hotelId}/picture/add", "/{hotelId}/rooms/{roomId}/picture/add"})
     public ModelAndView addPicture(@PathVariable(value = "hotelId") long hotelId,
                                    @PathVariable(value = "roomId") Optional<Long> roomId) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("front/picture-add");
         mav.addObject("hotelId", hotelId);
-        if(roomId.isPresent()){
+        if (roomId.isPresent()) {
             mav.addObject("roomId", roomId);
         }
         return mav;
@@ -57,7 +64,7 @@ public class PicturesController {
     @PostMapping({"/{hotelId}/picture/add", "/{hotelId}/rooms/{roomId}/picture/add"})
     public RedirectView addPicture(RedirectAttributes redirectAttributes,
                                    @PathVariable(value = "hotelId") long hotelId,
-                                   @PathVariable(required = false, value = "roomId") Long roomId,
+                                   @PathVariable(value = "roomId") Optional<Long> roomId,
                                    @RequestParam("file") MultipartFile multipartFile) {
 
         if (multipartFile != null) {
@@ -71,7 +78,6 @@ public class PicturesController {
                                 " для корректного добавления изображения");
                 return new RedirectView("/hotels", true);
             }
-
 
             File picturesDir = new File(uploadPath + "/pictures");
             if (!picturesDir.exists()) {
@@ -87,7 +93,19 @@ public class PicturesController {
                 absolutePathPerMonthDir.mkdir();
             }
             try {
-                pictureService.savePicture(multipartFile, absolutePathPerMonth, relativePathPerMonth,
+                if (roomId.isPresent()) {
+                    Optional<Room> roomOptional;
+                    roomOptional = roomService.getById(roomId.get());
+                    if (roomOptional.isEmpty()) {
+                        redirectAttributes.addFlashAttribute("message_error",
+                                "Не удалось определить комнату, " +
+                                        " для корректного добавления изображения");
+                        return new RedirectView("/hotels/{hotelId}", true);
+                    }
+                    pictureService.savePicture(multipartFile, absolutePathPerMonth, relativePathPerMonth,
+                            userName, roomOptional.get());
+
+                } else pictureService.savePicture(multipartFile, absolutePathPerMonth, relativePathPerMonth,
                         userName, hotelOptional.get());
             } catch (UserNotFoundException e) {
                 redirectAttributes.addFlashAttribute("message_error",

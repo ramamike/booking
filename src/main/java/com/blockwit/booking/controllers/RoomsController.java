@@ -120,7 +120,7 @@ public class RoomsController {
 
         Room room = null;
         try {
-            room = roomService.showDetail(roomId).orElseThrow(() -> new RoomNotFoundException());
+            room = roomService.getById(roomId).orElseThrow(() -> new RoomNotFoundException());
             ModelAndView mav = new ModelAndView();
             mav.addObject("hotelId", String.valueOf(hotelId));
             mav.setViewName("front/room-edit");
