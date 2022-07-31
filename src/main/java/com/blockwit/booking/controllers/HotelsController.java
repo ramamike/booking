@@ -103,6 +103,8 @@ public class HotelsController {
     public ModelAndView showHotel(RedirectAttributes redirectAttributes,
                                   @PathVariable(value = "hotelId") long hotelId, Model model) {
 
+        ModelAndView mav = new ModelAndView();
+
         boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
         String userName = securityService.getUsernameFromSecurityContext();
 
@@ -117,12 +119,24 @@ public class HotelsController {
                     "К сожалению, не удалось получить информация для пользователя");
         }
 
+        Optional<User> userOptional = userService.getUserByUsername(userName);
+
+        if (userName.equals("anonymousUser")) {
+            log.info("anonymousUser");
+        } else if (userOptional.isPresent()) {
+            mav.addObject("userId", userOptional.get().getId());
+        } else if (userOptional.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message_error",
+                    "Данные могут отображаться не корректно");
+            return new ModelAndView("redirect:/hotels");
+        }
+
         Hotel hotel = null;
         Iterable<Room> rooms = null;
         try {
-            ModelAndView mav = new ModelAndView();
             hotel = hotelService.showDetail(hotelId).orElseThrow(() -> new HotelNotFoundException());
             mav.addObject("hotel", hotel);
+            mav.addObject("isAdmin", isAdmin);
             rooms=roomService.getHotelRooms(hotelId);
             mav.addObject("rooms", rooms);
             mav.addObject("permissionEdit", permissionEdit);

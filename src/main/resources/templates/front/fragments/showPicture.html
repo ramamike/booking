@@ -2,17 +2,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <body>
 <div th:fragment="showPictureHotel">
-        <div th:insert="${hotel.getPictures().size == 0 && (isAdmin || hotel.getOwnerId()==userId)} ?
-                                                            ~{front/fragments/itemFront ::
-                                                                itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
-                                                                    itemIcon= 'fas fa-camera')}: ~{}">
+        <div th:insert="${hotel.getPictures().size() == 0 &&
+                        (isAdmin || hotel.getOwnerId()==userId)} ?
+                            ~{front/fragments/itemFront ::
+                                itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +'/picture/add',
+                                    itemIcon= 'fas fa-camera')}:
+                            ~{}">
         </div>
-        <a th:href="${hotel.getPictures().size > 0} ?
+        <a th:href="${hotel.getPictures().size() > 0} ?
                 ${hotel.getPictures().get(0).getPath()} :~{}">
-                <img th:src="${hotel.getPictures().size > 0} ?
+                <img th:src="${hotel.getPictures().size() > 0} ?
                                              ${hotel.getPictures().get(0).getPath()} :~{}"
                      class="img-fluid rounded"
-                     alt="loader" style="width: 150px;height: 120px;" id="loader"/>
+                     alt="loader" style="width: 150px;height: 120px;" id="hotel"/>
+        </a>
+</div>
+<div th:fragment="showPictureRoom">
+        <div th:insert="${room.getPictures().size() == 0 &&
+                        (isAdmin || hotel.getOwnerId()==userId)} ?
+                            ~{front/fragments/itemFront ::
+                                itemFrontIcon(targetUrl ='/hotels/'+${hotel.getId()} +
+                                                '/rooms/'+ ${room.getId()} + '/picture/add',
+                                    itemIcon= 'fas fa-camera')} :
+                            ~{}">
+        </div>
+        <a th:href="${room.getPictures().size() > 0} ?
+                ${room.getPictures().get(0).getPath()} :~{}">
+                <img th:src="${room.getPictures().size() > 0} ?
+                                             ${room.getPictures().get(0).getPath()} :~{}"
+                     class="img-fluid rounded"
+                     alt="loader" style="width: 150px;height: 120px;" id="room"/>
         </a>
 </div>
 </body>
