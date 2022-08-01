@@ -55,9 +55,7 @@ public class PicturesController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("front/picture-add");
         mav.addObject("hotelId", hotelId);
-        if (roomId.isPresent()) {
-            mav.addObject("roomId", roomId);
-        }
+        mav.addObject("roomId", roomId);
         return mav;
     }
 
