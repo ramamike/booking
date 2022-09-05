@@ -22,6 +22,10 @@
             </div>
             <button type="submit" class="btn btn-outline-primary">Обновить</button>
         </form>
+
+        <form th:action="${'/hotels/'+ hotelId + '/rooms/' + roomId +'/delete'}" method="post" class="my-4">
+            <button type="submit" class="btn btn-outline-primary">Удалить</button>
+        </form>
     </div>
 
 </div>

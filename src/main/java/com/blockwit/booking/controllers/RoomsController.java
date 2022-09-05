@@ -138,14 +138,12 @@ public class RoomsController {
     public RedirectView roomUpdate(RedirectAttributes redirectAttributes,
                                    @PathVariable(value = "hotelId") long hotelId,
                                    @PathVariable(value = "roomId") long roomId,
-                                   @RequestParam String name, @RequestParam String description,
-                                   Model model) {
+                                   @RequestParam String name, @RequestParam String description) {
 
         String userName = securityService.getUsernameFromSecurityContext();
-        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 
         try {
-            if (!isAdmin && !hotelService.checkEditingPermission(hotelId, userName)) {
+            if (!hotelService.checkEditingPermission(hotelId, userName)) {
                 redirectAttributes.addFlashAttribute("message_error",
                         userName + " не может редактировать данную запись");
                 return new RedirectView("/hotels/{hotelId}", true);
@@ -230,4 +228,40 @@ public class RoomsController {
         mav.addObject("bookedRooms", bookedRooms);
         return mav;
     }
+
+    @PostMapping("/{hotelId}/rooms/{roomId}/delete")
+    public ModelAndView roomDelete(RedirectAttributes redirectAttributes,
+                                   @PathVariable(value = "hotelId") long hotelId,
+                                   @PathVariable(value = "roomId") long roomId ) {
+
+        return new ModelAndView();
+//        String userName = securityService.getUsernameFromSecurityContext();
+//        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
+//
+//        try {
+//            if (!isAdmin && !hotelService.checkEditingPermission(hotelId, userName)) {
+//                redirectAttributes.addFlashAttribute("message_error",
+//                        userName + " не может редактировать данную запись");
+//                return new RedirectView("/hotels/{hotelId}", true);
+//            }
+//        } catch (HotelNotFoundException e) {
+//            redirectAttributes.addFlashAttribute("message_error",
+//                    "К сожалению, не удалось получить информация для пользователя");
+//        } catch (UserNotFoundException e) {
+//            redirectAttributes.addFlashAttribute("message_error",
+//                    "К сожалению, не удалось получить информация для пользователя");
+//        }
+
+//        try {
+//            roomService.roomUpdate(roomId, room);
+//            redirectAttributes.addFlashAttribute("message_success",
+//                    "Информацию о комнате обновили успешно!");
+//        } catch (RoomNotFoundException e) {
+//            redirectAttributes.addFlashAttribute("message_error",
+//                    "К сожалению, не удалось обновить информацию о комнате!");
+//        }
+//
+//        return new RedirectView("/hotels/{hotelId}", true);
+    }
+
 }

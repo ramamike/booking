@@ -1,5 +1,6 @@
 package com.blockwit.booking.entity;
 
+import com.blockwit.booking.model.HotelType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -41,4 +42,10 @@ public class Hotel {
             mappedBy = "hotel"
     )
     private List<Picture> pictures = new ArrayList<>();
+
+    private HotelType hotelType;
+
+    private Long numberRatings;
+
+    private  Long totalRatings;
 }
