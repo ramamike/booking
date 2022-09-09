@@ -233,12 +233,16 @@ public class RoomsController {
 
     @PostMapping("/{hotelId}/rooms/{roomId}/delete")
     public RedirectView roomDelete(RedirectAttributes redirectAttributes,
-                           @PathVariable(value = "hotelId") long hotelId,
-                           @PathVariable(value = "roomId") long roomId) {
+                                   @PathVariable(value = "hotelId") long hotelId,
+                                   @PathVariable(value = "roomId") long roomId) {
 
-        Either <Error, Room> room = roomService.deleteById(roomId);
-            redirectAttributes.addFlashAttribute("message_success",
-                    room.get().getName() + " удалена! ");
+        Either<Error, Room> roomEither = roomService.deleteById(roomId);
+        RedirectAttributes redirectAttributesToView = roomEither.isRight() ?
+                redirectAttributes.addFlashAttribute("message_success",
+                        roomEither.get().getName() + " удалена! ")
+                :
+                redirectAttributes.addFlashAttribute("message_error",
+                        roomEither.getLeft().getDescr());
         return new RedirectView("/hotels/{hotelId}", true);
 //        String userName = securityService.getUsernameFromSecurityContext();
 //        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");

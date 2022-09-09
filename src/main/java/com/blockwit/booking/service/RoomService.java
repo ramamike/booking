@@ -55,11 +55,9 @@ public class RoomService {
                 () -> Either.left(new Error(Error.ROOM_NOT_FOUND + roomId)),
                 () -> {
                     Either<Error, Room> either = Either.right(roomRepository.findById(roomId).get());
-                    System.out.println("process");
                     roomRepository.deleteById(roomId);
                     return either;
                 }
-
         );
     }
 }
