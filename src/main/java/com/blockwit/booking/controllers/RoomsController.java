@@ -6,11 +6,13 @@ import com.blockwit.booking.entity.User;
 import com.blockwit.booking.exceptions.HotelNotFoundException;
 import com.blockwit.booking.exceptions.RoomNotFoundException;
 import com.blockwit.booking.exceptions.UserNotFoundException;
+import com.blockwit.booking.model.Error;
 import com.blockwit.booking.security.SecurityService;
 import com.blockwit.booking.service.BookingService;
 import com.blockwit.booking.service.HotelService;
 import com.blockwit.booking.service.RoomService;
 import com.blockwit.booking.service.UserService;
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -183,7 +185,7 @@ public class RoomsController {
             if (!bookingService.bookRoom(roomId, userName)) {
                 redirectAttributes.addFlashAttribute("message_error",
                         "К сожалению комната не забронирована!");
-                }
+            }
         } catch (RoomNotFoundException e) {
             redirectAttributes.addFlashAttribute("message_error",
                     "К сожалению комната не найдена!");
@@ -230,11 +232,14 @@ public class RoomsController {
     }
 
     @PostMapping("/{hotelId}/rooms/{roomId}/delete")
-    public ModelAndView roomDelete(RedirectAttributes redirectAttributes,
-                                   @PathVariable(value = "hotelId") long hotelId,
-                                   @PathVariable(value = "roomId") long roomId ) {
+    public RedirectView roomDelete(RedirectAttributes redirectAttributes,
+                           @PathVariable(value = "hotelId") long hotelId,
+                           @PathVariable(value = "roomId") long roomId) {
 
-        return new ModelAndView();
+        Either <Error, Room> room = roomService.deleteById(roomId);
+            redirectAttributes.addFlashAttribute("message_success",
+                    room.get().getName() + " удалена! ");
+        return new RedirectView("/hotels/{hotelId}", true);
 //        String userName = securityService.getUsernameFromSecurityContext();
 //        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
 //

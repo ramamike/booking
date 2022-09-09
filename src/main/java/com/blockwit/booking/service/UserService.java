@@ -38,12 +38,12 @@ public class UserService {
 
         if (userRepository.existsByUsername(login)) {
             log.trace("Login: " + login + " already exists!");
-            return Either.left(new Error(Error.EC_LOGIN_EXISTS, Error.EM_LOGIN_EXISTS + login));
+            return Either.left(new Error(Error.LOGIN_EXISTS + login));
         }
 
         if (userRepository.existsByEmail(email)) {
             log.trace("Email: " + email + " already exists!");
-            return Either.left(new Error(Error.EC_EMAIL_EXISTS, Error.EM_EMAIL_EXISTS + email));
+            return Either.left(new Error(Error.EMAIL_EXISTS + email));
         }
 
         Set<Role> rolesForAccount;

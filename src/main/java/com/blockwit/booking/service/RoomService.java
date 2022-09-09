@@ -2,10 +2,14 @@ package com.blockwit.booking.service;
 
 import com.blockwit.booking.entity.Room;
 import com.blockwit.booking.exceptions.RoomNotFoundException;
+import com.blockwit.booking.model.Error;
 import com.blockwit.booking.repository.RoomRepository;
+import com.blockwit.booking.service.Utils.WithOptional;
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -43,5 +47,19 @@ public class RoomService {
 
     public Iterable<Room> getHotelRooms(Long hotelId) throws RoomNotFoundException {
         return roomRepository.getRoomByHotelIdOrderedByName(hotelId);
+    }
+
+    //    @Transactional
+    public Either<Error, Room> deleteById(Long roomId) {
+        return WithOptional.process(roomRepository.findById(roomId),
+                () -> Either.left(new Error(Error.ROOM_NOT_FOUND + roomId)),
+                () -> {
+                    Either<Error, Room> either = Either.right(roomRepository.findById(roomId).get());
+                    System.out.println("process");
+                    roomRepository.deleteById(roomId);
+                    return either;
+                }
+
+        );
     }
 }
