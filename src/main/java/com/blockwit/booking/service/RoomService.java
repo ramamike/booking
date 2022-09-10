@@ -49,12 +49,12 @@ public class RoomService {
         return roomRepository.getRoomByHotelIdOrderedByName(hotelId);
     }
 
-    //    @Transactional
+    @Transactional
     public Either<Error, Room> deleteById(Long roomId) {
         return WithOptional.process(roomRepository.findById(roomId),
                 () -> Either.left(new Error(Error.ROOM_NOT_FOUND + roomId)),
-                () -> {
-                    Either<Error, Room> either = Either.right(roomRepository.findById(roomId).get());
+                (room) -> {
+                    Either<Error, Room> either = Either.right(room);
                     roomRepository.deleteById(roomId);
                     return either;
                 }

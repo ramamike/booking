@@ -245,34 +245,5 @@ public class RoomsController {
                 room -> ControllerHelper.returnSuccess(redirectAttributes,
                         "redirect:/hotels/{hotelId}",room.getName() + " удалена")
         );
-
-//        String userName = securityService.getUsernameFromSecurityContext();
-//        boolean isAdmin = securityService.checkRoleFromSecurityContext("ADMIN");
-//
-//        try {
-//            if (!isAdmin && !hotelService.checkEditingPermission(hotelId, userName)) {
-//                redirectAttributes.addFlashAttribute("message_error",
-//                        userName + " не может редактировать данную запись");
-//                return new RedirectView("/hotels/{hotelId}", true);
-//            }
-//        } catch (HotelNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "К сожалению, не удалось получить информация для пользователя");
-//        } catch (UserNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "К сожалению, не удалось получить информация для пользователя");
-//        }
-
-//        try {
-//            roomService.roomUpdate(roomId, room);
-//            redirectAttributes.addFlashAttribute("message_success",
-//                    "Информацию о комнате обновили успешно!");
-//        } catch (RoomNotFoundException e) {
-//            redirectAttributes.addFlashAttribute("message_error",
-//                    "К сожалению, не удалось обновить информацию о комнате!");
-//        }
-//
-//        return new RedirectView("/hotels/{hotelId}", true);
     }
-
 }
